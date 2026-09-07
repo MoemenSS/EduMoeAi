@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://edumoe.ai"),
+  metadataBase: new URL("https://edu-moe-ai.vercel.app"),
   title: {
-    default: "EduMoe — Learn with direction",
+    default: "EduMoe — Computer Science, made clear",
     template: "%s | EduMoe",
   },
   description:
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#07110e",
+  themeColor: "#08080d",
   colorScheme: "dark",
 };
 

@@ -30,8 +30,8 @@ export function CourseCatalog({ courses }: { courses: Course[] }) {
         {visible.map((course, index) => (
           <article id={course.code.toLowerCase()} className="catalog-card" key={course.code} style={{ "--course-accent": course.accent } as React.CSSProperties}>
             <div className="catalog-number">{String(index + 1).padStart(2, "0")}</div>
-            <div className="catalog-card-copy"><span>{course.code}</span><h2>{course.title}</h2><p>{course.description}</p></div>
-            <div className="catalog-card-footer"><span><Check size={14} aria-hidden="true" /> {course.status}</span><Link href={course.code === "CS102" ? "/lecture" : "/dashboard"} aria-label={`Open ${course.title}`}><ArrowUpRight size={18} /></Link></div>
+            <div className="catalog-card-copy"><span>{course.code}</span><h2>{course.title}</h2><p>{course.description}</p><ul>{course.topics?.map((topic) => <li key={topic}>{topic}</li>)}</ul></div>
+            <div className="catalog-card-footer"><span><Check size={14} aria-hidden="true" /> {course.lessons} lessons · {course.status}</span><Link href={course.code === "CS102" ? "/lecture" : `/lecture?course=${course.code}`} aria-label={`Open ${course.title}`}><ArrowUpRight size={18} /></Link></div>
           </article>
         ))}
       </div>
@@ -39,4 +39,3 @@ export function CourseCatalog({ courses }: { courses: Course[] }) {
     </section>
   );
 }
-

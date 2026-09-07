@@ -1,6 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
+  ArrowUpRight,
   BookOpenCheck,
   BrainCircuit,
   CalendarClock,
@@ -10,9 +12,13 @@ import {
   ShieldCheck,
   Sparkles,
   Swords,
+  Code2,
+  FunctionSquare,
+  MessageCircleMore,
+  Play,
+  Trophy,
 } from "lucide-react";
 import { CourseCard } from "@/components/course-card";
-import { MoeAiPreview } from "@/components/moeai-preview";
 import { SiteHeader } from "@/components/site-header";
 import { courses } from "@/lib/courses";
 
@@ -45,6 +51,13 @@ const workspaces = [
   { href: "/ranked", icon: Swords, label: "Ranked", copy: "Recall under pressure" },
 ];
 
+const liveTools = [
+  { href: "/simulators", icon: Code2, label: "Live C++ compiler", copy: "Write, run, and trace first-year programs without leaving the lesson.", accent: "#61dafb" },
+  { href: "/simulators", icon: CircuitBoard, label: "Circuit lab", copy: "Build gates, inspect truth tables, then continue in browser Logisim.", accent: "#b197fc" },
+  { href: "/simulators", icon: FunctionSquare, label: "Math studio", copy: "Explore calculus, probability, discrete math, and physics visually.", accent: "#ffb86b" },
+  { href: "/moeai", icon: MessageCircleMore, label: "MoeAI workspace", copy: "Ask inside the exact course, lecture, and problem you are working on.", accent: "#ff5d87" },
+];
+
 export default function Home() {
   return (
     <main>
@@ -54,18 +67,18 @@ export default function Home() {
 
       <section className="hero shell">
         <div className="hero-copy">
-          <div className="eyebrow-pill"><Sparkles size={14} aria-hidden="true" /> Built for FUE Computer Science</div>
+          <div className="eyebrow-pill"><Sparkles size={14} aria-hidden="true" /> Built with FUE Computer Science students</div>
           <h1>
-            Learn with <span>direction.</span><br />
-            Grow with <span>context.</span>
+            Computer science,<br />
+            <span>finally made clear.</span>
           </h1>
           <p className="hero-description">
-            EduMoe brings your courses, practice, progress, and an AI tutor that understands your
-            curriculum into one focused learning space.
+            Lectures, C++ tools, circuit labs, deep practice, and MoeAI—organized around the
+            courses you are actually taking, in the visual language EduMoe started with.
           </p>
           <div className="hero-actions">
             <Link className="button button-primary" href="/dashboard">
-              Open your dashboard <ArrowRight size={17} aria-hidden="true" />
+              Start learning <ArrowRight size={17} aria-hidden="true" />
             </Link>
             <Link className="button button-secondary" href="/moeai">
               Meet MoeAI <ChevronRight size={17} aria-hidden="true" />
@@ -75,10 +88,21 @@ export default function Home() {
             <div className="avatar-stack" aria-hidden="true">
               <span>M</span><span>A</span><span>Y</span><span>+</span>
             </div>
-            <p><strong>230+ students</strong><span>already learning with EduMoe content</span></p>
+            <p><strong>8 connected subjects</strong><span>one first-year CS learning system</span></p>
           </div>
         </div>
-        <MoeAiPreview />
+        <div className="hero-media glass-panel">
+          <Image src="/media/edumoe-learning-film.png" alt="Programming, digital logic, mathematics, probability, and physics connected by one learning path" fill priority sizes="(max-width: 900px) 100vw, 48vw" />
+          <div className="hero-media-caption"><span className="play-disc"><Play size={17} fill="currentColor" /></span><span><strong>Inside EduMoe</strong><small>Courses become one connected learning system</small></span></div>
+          <div className="hero-media-chip">01:24 · product film</div>
+        </div>
+      </section>
+
+      <section className="tool-bento shell" aria-labelledby="tools-heading">
+        <div className="tool-bento-heading"><span className="section-kicker">Not a static course site</span><h2 id="tools-heading">Build it. Understand it. Break it. Fix it.</h2><p>The working tools from the original prototype stay central—now organized as maintainable product features.</p></div>
+        <div className="tool-bento-grid">
+          {liveTools.map(({ href, icon: Icon, label, copy, accent }, index) => <Link className={`tool-tile tool-tile-${index + 1}`} href={href} key={label} style={{ "--tile-accent": accent } as React.CSSProperties}><span className="tool-icon"><Icon size={22} /></span><span className="tool-index">0{index + 1}</span><span className="tool-copy"><strong>{label}</strong><small>{copy}</small></span><ArrowUpRight size={18} /></Link>)}
+        </div>
       </section>
 
       <section className="workspace-rail shell" aria-label="EduMoe learning workspaces">
@@ -101,6 +125,11 @@ export default function Home() {
         <div className="course-grid">
           {courses.map((course) => <CourseCard key={course.code} course={course} />)}
         </div>
+      </section>
+
+      <section className="ranked-callout shell">
+        <div><span className="section-kicker">Competitive arena</span><h2>Practice gets sharper when every round counts.</h2><p>Topic-based matchmaking, Elo progression, tournaments, and a campus ladder—designed around mastery, not button mashing.</p><Link className="button button-secondary" href="/ranked">Enter Ranked <Swords size={16} /></Link></div>
+        <div className="ranked-score glass-panel"><Trophy size={26} /><span>Silver II</span><strong>1,206</strong><small>94 Elo to Gold I</small><i><b style={{ width: "64%" }} /></i></div>
       </section>
 
       <section className="section shell" id="moeai">
@@ -148,11 +177,10 @@ export default function Home() {
       </section>
 
       <footer className="site-footer shell">
-        <span>EduMoe</span>
+          <span>EDUMOE</span>
         <p>Built for students who want to understand, not just memorize.</p>
         <span>FUE · Computer Science</span>
       </footer>
     </main>
   );
 }
-

@@ -8,6 +8,7 @@ const links = [
   { label: "Practice", href: "/quizzes" },
   { label: "Labs", href: "/simulators" },
   { label: "Ranked", href: "/ranked" },
+  { label: "About", href: "/about" },
 ];
 
 export function SiteHeader() {
@@ -45,4 +46,3 @@ export function SiteHeader() {
     </header>
   );
 }
-

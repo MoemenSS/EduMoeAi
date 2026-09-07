@@ -5,9 +5,11 @@ export const courses: Course[] = [
     code: "CS101",
     title: "Computing Fundamentals",
     description: "Build the mental models behind modern computing.",
-    accent: "#79e9b4",
+    accent: "#f43f6d",
     symbol: "01",
     status: "Foundation",
+    lessons: 8,
+    topics: ["How computers represent data", "CPU, memory, and storage", "Operating systems", "Networks and the web"],
   },
   {
     code: "CS102",
@@ -16,6 +18,8 @@ export const courses: Course[] = [
     accent: "#8ac7ff",
     symbol: "{ }",
     status: "8 modules",
+    lessons: 12,
+    topics: ["C++ program anatomy", "Control flow", "Functions and scope", "Arrays, pointers, and memory"],
   },
   {
     code: "CS103",
@@ -24,6 +28,8 @@ export const courses: Course[] = [
     accent: "#c9a7ff",
     symbol: "⊕",
     status: "6 modules",
+    lessons: 10,
+    topics: ["Boolean algebra", "Combinational circuits", "Karnaugh maps", "Sequential logic"],
   },
   {
     code: "MTH101",
@@ -32,6 +38,8 @@ export const courses: Course[] = [
     accent: "#ffbd7b",
     symbol: "∫",
     status: "7 modules",
+    lessons: 10,
+    topics: ["Limits and continuity", "Derivative rules", "Applications of derivatives", "Integrals"],
   },
   {
     code: "MTH102",
@@ -40,6 +48,8 @@ export const courses: Course[] = [
     accent: "#ff9fc7",
     symbol: "∈",
     status: "6 modules",
+    lessons: 9,
+    topics: ["Logic and proof", "Sets and relations", "Counting", "Graphs and trees"],
   },
   {
     code: "PHY101",
@@ -48,6 +58,8 @@ export const courses: Course[] = [
     accent: "#7dd8e8",
     symbol: "λ",
     status: "5 modules",
+    lessons: 8,
+    topics: ["Kinematics", "Forces and energy", "Electricity", "DC circuits"],
   },
   {
     code: "MTH201",
@@ -56,6 +68,8 @@ export const courses: Course[] = [
     accent: "#f0d17a",
     symbol: "dy",
     status: "8 modules",
+    lessons: 11,
+    topics: ["First-order equations", "Separable models", "Exact equations", "Second-order systems"],
   },
   {
     code: "STA201",
@@ -64,6 +78,8 @@ export const courses: Course[] = [
     accent: "#a8b8ff",
     symbol: "P",
     status: "7 modules",
+    lessons: 10,
+    topics: ["Counting probability", "Random variables", "Discrete distributions", "Estimation"],
   },
 ];
 
@@ -75,6 +91,8 @@ export const upcomingCourses: Course[] = [
     accent: "#ff9fc7",
     symbol: "[]",
     status: "Next term",
+    lessons: 0,
+    topics: ["Linear structures", "Trees", "Hashing", "Graph algorithms"],
   },
   {
     code: "CS202",
@@ -83,6 +101,8 @@ export const upcomingCourses: Course[] = [
     accent: "#7dd8e8",
     symbol: "{}",
     status: "Next term",
+    lessons: 0,
+    topics: ["Classes", "Composition", "Inheritance", "Polymorphism"],
   },
 ];
 
@@ -107,4 +127,3 @@ export const lectureUnits = [
     lessons: ["Arrays in memory", "Pointers", "Dynamic allocation"],
   },
 ];
-

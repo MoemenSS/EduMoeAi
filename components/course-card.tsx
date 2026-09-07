@@ -8,6 +8,8 @@ export type Course = {
   accent: string;
   symbol: string;
   status: string;
+  lessons?: number;
+  topics?: string[];
 };
 
 export function CourseCard({ course }: { course: Course }) {
