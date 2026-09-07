@@ -5,9 +5,9 @@ import { Activity, BookOpen, Check, FileQuestion, Plus, Search, Settings, Shield
 
 const initialCourses = ["Structured Programming", "Logic Design", "Differential Equations", "Probability & Statistics"];
 const users = [
-  { name: "Ahmed M.", email: "ahmed@edu.fue.edu.eg", status: "Active", progress: "68%" },
-  { name: "Mariam H.", email: "mariam@edu.fue.edu.eg", status: "Active", progress: "82%" },
-  { name: "Youssef A.", email: "youssef@edu.fue.edu.eg", status: "Paused", progress: "31%" },
+  { name: "Demo Student 01", email: "student01@example.com", status: "Active", progress: "68%" },
+  { name: "Demo Student 02", email: "student02@example.com", status: "Active", progress: "82%" },
+  { name: "Demo Student 03", email: "student03@example.com", status: "Paused", progress: "31%" },
 ];
 
 export function AdminConsole() {
