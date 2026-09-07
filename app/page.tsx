@@ -5,8 +5,11 @@ import {
   BrainCircuit,
   CalendarClock,
   ChevronRight,
+  CircuitBoard,
+  Gauge,
   ShieldCheck,
   Sparkles,
+  Swords,
 } from "lucide-react";
 import { CourseCard } from "@/components/course-card";
 import { MoeAiPreview } from "@/components/moeai-preview";
@@ -34,6 +37,14 @@ const capabilities = [
   },
 ];
 
+const workspaces = [
+  { href: "/dashboard", icon: Gauge, label: "Dashboard", copy: "Your next useful step" },
+  { href: "/moeai", icon: BrainCircuit, label: "MoeAI", copy: "Curriculum-aware help" },
+  { href: "/quizzes", icon: BookOpenCheck, label: "Practice", copy: "Focused concept checks" },
+  { href: "/simulators", icon: CircuitBoard, label: "Labs", copy: "See the idea move" },
+  { href: "/ranked", icon: Swords, label: "Ranked", copy: "Recall under pressure" },
+];
+
 export default function Home() {
   return (
     <main>
@@ -53,10 +64,10 @@ export default function Home() {
             curriculum into one focused learning space.
           </p>
           <div className="hero-actions">
-            <Link className="button button-primary" href="/courses">
-              Explore your courses <ArrowRight size={17} aria-hidden="true" />
+            <Link className="button button-primary" href="/dashboard">
+              Open your dashboard <ArrowRight size={17} aria-hidden="true" />
             </Link>
-            <Link className="button button-secondary" href="#moeai">
+            <Link className="button button-secondary" href="/moeai">
               Meet MoeAI <ChevronRight size={17} aria-hidden="true" />
             </Link>
           </div>
@@ -68,6 +79,10 @@ export default function Home() {
           </div>
         </div>
         <MoeAiPreview />
+      </section>
+
+      <section className="workspace-rail shell" aria-label="EduMoe learning workspaces">
+        {workspaces.map(({ href, icon: Icon, label, copy }) => <Link href={href} key={href}><Icon size={18} /><span><strong>{label}</strong><small>{copy}</small></span><ArrowRight size={15} /></Link>)}
       </section>
 
       <section className="signal-bar" aria-label="Platform benefits">
@@ -128,7 +143,7 @@ export default function Home() {
           <span className="section-kicker">The next study session starts here</span>
           <h2>Your courses finally have a home.</h2>
           <p>Explore the first-year Computer Science curriculum and keep every useful learning step connected.</p>
-          <Link className="button button-light" href="/courses">Open EduMoe <ArrowRight size={17} aria-hidden="true" /></Link>
+          <Link className="button button-light" href="/dashboard">Open EduMoe <ArrowRight size={17} aria-hidden="true" /></Link>
         </div>
       </section>
 
@@ -140,3 +155,4 @@ export default function Home() {
     </main>
   );
 }
+

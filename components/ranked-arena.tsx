@@ -1,0 +1,17 @@
+"use client";
+
+import { useState } from "react";
+import { Bot, Check, ChevronRight, Flame, Medal, Shield, Swords, Trophy } from "lucide-react";
+
+const opponents = [
+  { name: "Nora-8", specialty: "Logic Design", elo: 1180, tone: "#c9a7ff" },
+  { name: "StackBot", specialty: "Structured Programming", elo: 1240, tone: "#8ac7ff" },
+  { name: "Lambda", specialty: "Calculus", elo: 1320, tone: "#ffbd7b" },
+];
+const leaders = ["Salma K.", "Youssef A.", "Mariam H.", "Ahmed M.", "You"];
+
+export function RankedArena() {
+  const [opponent, setOpponent] = useState(opponents[0]); const [matched, setMatched] = useState(false); const [answer, setAnswer] = useState<number | null>(null);
+  return <div className="ranked-grid"><section className="rank-profile glass-panel"><div className="rank-emblem"><Trophy size={28} /></div><span className="section-kicker">Silver II</span><h2>1,206 Elo</h2><p>Your strongest topics are C++ control flow and first-order equations.</p><div className="rank-stats"><span><strong>18</strong> wins</span><span><strong>61%</strong> win rate</span><span><strong>4</strong> streak</span></div><div className="rank-progress"><span style={{ width: "64%" }} /></div><small>94 Elo to Gold I</small></section><section className="arena-card workspace-panel"><div className="panel-heading"><div><span className="section-kicker">Live arena</span><h2>{matched ? `You vs ${opponent.name}` : "Choose your challenger."}</h2></div><Swords size={21} /></div>{!matched ? <div className="opponent-list">{opponents.map((bot) => <button className={opponent.name === bot.name ? "active" : ""} key={bot.name} onClick={() => setOpponent(bot)}><span className="bot-mark" style={{ color: bot.tone }}><Bot size={19} /></span><span><strong>{bot.name}</strong><small>{bot.specialty}</small></span><em>{bot.elo}</em></button>)}<button className="match-button" onClick={() => setMatched(true)}>Start ranked match <ChevronRight size={16} /></button></div> : <div className="match-question"><div className="match-score"><span>You <strong>01</strong></span><i>Round 2 / 5</i><span><strong>01</strong> {opponent.name}</span></div><span className="section-kicker">Logic Design · 18 sec</span><h3>Which gate outputs true only when its inputs differ?</h3><div className="answer-grid">{["AND", "XOR", "NOR", "XNOR"].map((option, index) => <button className={answer === index ? (index === 1 ? "correct" : "incorrect") : ""} key={option} onClick={() => setAnswer(index)}><span>{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>{answer !== null ? <button className="match-button" onClick={() => { setAnswer(null); setMatched(false); }}>Finish demo round <Check size={15} /></button> : null}</div>}</section><section className="leaderboard workspace-panel"><div className="panel-heading"><div><span className="section-kicker">Campus ladder</span><h2>Top learners.</h2></div><Medal size={20} /></div><div className="leader-list">{leaders.map((name, index) => <div className={name === "You" ? "you" : ""} key={name}><span>{String(index + 1).padStart(2, "0")}</span><strong>{name}</strong><small>{1382 - index * 41} Elo</small></div>)}</div></section><section className="achievement-strip workspace-panel"><span><Flame size={19} /><strong>Hot streak</strong><small>Win 3 matches in a row</small></span><span><Shield size={19} /><strong>Logic defender</strong><small>80% in Logic Design</small></span><span><Trophy size={19} /><strong>Campus climb</strong><small>Reach the top 25</small></span></section></div>;
+}
+

@@ -3,9 +3,11 @@ import { ArrowUpRight, Menu } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 
 const links = [
+  { label: "Dashboard", href: "/dashboard" },
   { label: "Courses", href: "/courses" },
-  { label: "MoeAI", href: "/#moeai" },
-  { label: "How it works", href: "/#how-it-works" },
+  { label: "Practice", href: "/quizzes" },
+  { label: "Labs", href: "/simulators" },
+  { label: "Ranked", href: "/ranked" },
 ];
 
 export function SiteHeader() {
@@ -23,8 +25,8 @@ export function SiteHeader() {
         ))}
       </nav>
 
-      <Link className="header-cta" href="/courses">
-        Start learning <ArrowUpRight size={15} aria-hidden="true" />
+      <Link className="header-cta" href="/moeai">
+        Ask MoeAI <ArrowUpRight size={15} aria-hidden="true" />
       </Link>
 
       <details className="mobile-nav">
@@ -37,9 +39,10 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
-          <Link href="/courses">Start learning</Link>
+          <Link href="/moeai">Ask MoeAI</Link>
         </nav>
       </details>
     </header>
   );
 }
+
