@@ -5,18 +5,24 @@ import Link from "next/link";
 import { ArrowRight, BookOpenCheck, BrainCircuit, CalendarDays, Check, Flame, Trophy, Zap } from "lucide-react";
 import { courseProgress } from "@/lib/courses";
 
+type ProgressRow = { course_code: string; current_lesson: string | null; percent: number };
+
 const schedule = [
   { time: "Today · 10:00", title: "Probability checkpoint", note: "5 questions · 8 minutes" },
   { time: "Friday", title: "Logic assignment", note: "K-map simplification" },
   { time: "Next week", title: "C++ lab", note: "Pointers & arrays" },
 ];
 
-export function DashboardExperience() {
+export function DashboardExperience({ progressRows = [], connected = false }: { progressRows?: ProgressRow[]; connected?: boolean }) {
   const [completed, setCompleted] = useState<string[]>([]);
+  const progress = progressRows.length ? courseProgress.map((course) => {
+    const saved = progressRows.find((row) => row.course_code === course.code);
+    return saved ? { ...course, progress: saved.percent, next: saved.current_lesson || course.next } : course;
+  }) : courseProgress;
   return (
     <div className="dashboard-grid">
       <section className="focus-card glass-panel">
-        <div className="focus-card-top"><span className="status-dot"><Flame size={14} /> Today&apos;s focus</span><span>24 min</span></div>
+        <div className="focus-card-top"><span className="status-dot"><Flame size={14} /> Today&apos;s focus</span><span>{connected ? "Supabase synced" : "Local preview"}</span></div>
         <div><span className="section-kicker">Differential Equations · Unit 2</span><h2>Separable equations</h2><p>Continue from the worked example and finish the three-question check.</p></div>
         <div className="focus-progress"><span style={{ width: "68%" }} /></div>
         <div className="focus-actions"><Link className="button button-primary" href="/lecture">Continue lesson <ArrowRight size={16} /></Link><Link className="button button-secondary" href="/quizzes">Quick practice</Link></div>
@@ -31,7 +37,7 @@ export function DashboardExperience() {
       <section className="workspace-panel progress-panel">
         <div className="panel-heading"><div><span className="section-kicker">Course momentum</span><h2>Keep the signal moving.</h2></div><Link href="/courses">All courses <ArrowRight size={15} /></Link></div>
         <div className="progress-list">
-          {courseProgress.map((course) => <article key={course.code}><div><span>{course.code}</span><strong>{course.name}</strong><small>Next: {course.next}</small></div><div className="progress-value"><strong>{course.progress}%</strong><span><i style={{ width: `${course.progress}%` }} /></span></div></article>)}
+          {progress.map((course) => <article key={course.code}><div><span>{course.code}</span><strong>{course.name}</strong><small>Next: {course.next}</small></div><div className="progress-value"><strong>{course.progress}%</strong><span><i style={{ width: `${course.progress}%` }} /></span></div></article>)}
         </div>
       </section>
 
@@ -52,4 +58,3 @@ export function DashboardExperience() {
     </div>
   );
 }
-
