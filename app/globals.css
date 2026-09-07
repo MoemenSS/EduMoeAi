@@ -458,6 +458,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .opponent-list strong { font-size: 11px; }
 .opponent-list small, .opponent-list em { color: #6f867a; font-size: 8px; font-style: normal; }
 .opponent-list .match-button { margin-top: 7px; width: 100%; }
+.realtime-match { width: 100%; min-height: 40px; padding: 0 13px; border: 1px solid rgba(244,63,109,.22); border-radius: 11px; color: #f2dfe5; background: rgba(225,29,72,.07); display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 9px; cursor: pointer; }
+.realtime-match:disabled { opacity: .65; cursor: wait; }
 .match-score { display: flex; justify-content: space-between; align-items: center; margin: 22px 0 38px; color: #81978c; font-size: 10px; }
 .match-score span { display: flex; gap: 8px; align-items: center; }
 .match-score strong { color: #e0ece5; font-size: 22px; }
