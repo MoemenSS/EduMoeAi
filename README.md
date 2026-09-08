@@ -1,6 +1,6 @@
 # EduMoeAi
 
-A Next.js 16 / React 19 / TypeScript learning platform for FUE Computer Science students, connected to Supabase and deployed on Vercel.
+A Next.js 16 / React 19 / TypeScript conversion of the original EduMoe interface for FUE Computer Science students. The supplied HTML documents are the visual source of truth and are generated into typed runtime documents without redesigning them.
 
 ## Run
 
@@ -22,16 +22,17 @@ npm run build
 
 ## Structure
 
-- `app/`: page routes, auth callback, and authenticated admin server actions.
-- `components/`: student workspaces and admin editors.
-- `lib/`: course design metadata, content access, practice seed, shared learning calculations, Supabase clients.
+- `app/`: thin TSX page routes for every original screen, plus the existing auth callback.
+- `components/original-page.tsx`: the isolated React renderer that prevents framework styles from changing the originals.
+- `lib/original-pages.generated.ts`: generated TypeScript documents used by the production routes.
+- `scripts/convert-original-pages.mjs`: repeatable converter from the supplied HTML sources to the typed runtime source.
 - `content/`: original starter reading seed.
 - `database/`: reviewed database operations and rollback-only verification scripts.
-- `design-reference/`: supplied original HTML, preserved outside the production public directory.
+- `design-reference/`: supplied original HTML preserved as reference copies outside the public directory.
 - `public/brand/`: SVG wordmark and app mark.
 - `docs/`: release status, verification evidence, and third-party notices.
 
-Course and practice content comes from Supabase. The checked-in question bank is seed/reference data; admin edits in the database control the published practice library. Ranked challenges use a separate private answer bank and server scoring.
+The original page styling, copy, canvas effects, themes, and browser interactions are preserved. Only old links such as `dashboard.html` are translated to their equivalent Next.js routes.
 
 ## Deployment
 

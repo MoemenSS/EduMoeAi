@@ -53,4 +53,5 @@ Thumbs.db
 .vscode-test/
 # Generated verification artifacts
 browser-*.png
+qa-*.png
 .verification/

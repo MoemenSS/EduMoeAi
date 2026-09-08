@@ -1,34 +1,29 @@
-# Release status — September 8, 2026
+# Release status — original design restoration
 
-## Implemented
+## Published interface
 
-- Next.js/React/TypeScript routes for all nine supplied HTML entry points, plus About and sign-in. Original files preserved outside `public/`.
-- Ruby glass homepage with interactive C++/logic/calculus excerpts, four persisted accent themes, mobile layout, reduced-motion support, and low-power effects control.
-- HeroUI buttons, scoped loading of mathjs and third-party labs, SVG brand assets, and a small silent product-tour WebM.
-- Supabase-backed course catalog and eight published starter readings with worked examples. Each course opens its own material.
-- 256 editable practice questions/variations in Supabase: 64 authored concepts and 192 numerical variants. This is 32 items per subject, not 256 different concepts. Questions and answers shuffle for each set.
-- Device and account practice history, per-account local storage, dashboard accuracy/streak/weak-topic calculations, and shared MoeAI learning signals.
-- Server-backed idempotent lesson completion with percentage calculated from published lessons.
-- Original OneCompiler C++ embed restored. Full external Logisim.app engine loads only on request.
-- Calculus differentiation with input validation; binomial/Poisson distributions; complete/cycle/path graphs; ideal projectile motion.
-- Ranked solo challenges with 376 separate private question variants, server deadlines, 20-start daily limit, serialized starts, server scoring, replay protection, ownership checks, and opt-in public leaderboard. No fake bots or Elo.
-- Admin course/lecture/question editing, draft/published/archived states, resource/configuration records, student account lookup, audited role changes, and automatic database audit entries. Revoked admin roles are checked against current database state.
-- Auth session refresh proxy and safe callback redirect handling. New public profiles opt out of the ladder until the student chooses to publish their display name.
+The original EduMoe HTML documents are the visual source of truth for all nine main routes. Each document is converted into a generated TypeScript module and rendered by a small TSX route component inside an isolated document viewport. This retains the original CSS cascade, DOM, canvas work, fonts, copy, animations, and JavaScript behavior without interference from the newer shared UI.
 
-## Not complete or awaiting the owner
+| Original document | Production route |
+| --- | --- |
+| `index (7).html` | `/` |
+| `courses.html` | `/courses` |
+| `dashboard.html` | `/dashboard` |
+| `lecture_example.html` | `/lecture` |
+| `moeai.html` | `/moeai` |
+| `quizzes.html` | `/quizzes` |
+| `ranked.html` | `/ranked` |
+| `simulators.html` | `/simulators` |
+| `admin.html` | `/admin` |
 
-- The eight Telegram recordings have not been uploaded to YouTube. The source posts and destination channel are still needed; the starter readings are not substitutes for those recordings.
-- No generative model provider/key is configured. MoeAI explicitly runs in notes mode, retrieving published passages and calculated learning signals; it is not a live generative tutor yet.
-- Live head-to-head matchmaking, Elo seasons, and tournaments are not included. Ranked currently uses a real, verified solo challenge ladder.
-- The first administrator must sign in once, and the owner must identify the email to receive the admin role. No real administrator was inferred or silently assigned.
-- Admin resources/settings are stored content records. They are not a full institution ERP, document ingestion pipeline, model management system, or arbitrary database editor.
-- Formal testing on a physical 4 GB phone is outstanding. Desktop/mobile browser checks and reduced-effects behavior are covered; hardware performance is not claimed.
-- External lab availability and mobile usability remain dependent on OneCompiler and Logisim.app. A full-screen link is provided when embedding is blocked.
+The converter changes only legacy links that explicitly reference another `.html` file. Those links open the corresponding Next.js route in the top-level window. Hash links, external links, appearance, and other interactions remain as authored in the originals.
 
-## Operation notes
+## Verification
 
-The SQL files document changes applied to the linked Supabase project and rollback-only tests. They are not a clean-room initial schema; the base tables already existed. Do not rerun operation scripts blindly.
+- TypeScript and ESLint pass.
+- The Next.js 16 production build passes.
+- All nine converted routes load in the browser.
+- Direct-source and TSX-route captures were compared in the same browser state. The layout, typography, palette, artwork, copy, and controls match.
+- The original documents remain in `design-reference/originals/`, and `scripts/convert-original-pages.mjs` makes the conversion reproducible.
 
-No service-role key is shipped to clients. Practice answers are intentionally public to support immediate explanations; the ranked answer bank is private and distinct.
-
-The original HTML references contain historical demos and unimplemented controls. Their presence in the repository does not mean every original interaction is production-ready.
+The existing Supabase migrations and supporting newer components remain in the repository history and source tree, but the restored original routes do not visually expose that newer interface.
