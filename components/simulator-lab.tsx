@@ -1,35 +1,125 @@
 "use client";
-
-import { useMemo, useState } from "react";
-import { ArrowUpRight, Calculator, Check, CircuitBoard, Clock3, Code2, FunctionSquare, GitBranch, Play, RotateCcw, Sigma, ToggleLeft, Waves } from "lucide-react";
-
-type Lab = "Circuit" | "C++" | "Probability" | "Calculus" | "Discrete" | "Physics";
-const labs: { name: Lab; icon: typeof CircuitBoard }[] = [
-  { name: "Circuit", icon: CircuitBoard }, { name: "C++", icon: Code2 }, { name: "Probability", icon: Calculator },
-  { name: "Calculus", icon: FunctionSquare }, { name: "Discrete", icon: Sigma }, { name: "Physics", icon: Waves },
+import dynamic from "next/dynamic";
+import { useState } from "react";
+import {
+  ArrowUpRight,
+  CircuitBoard,
+  Code2,
+  FunctionSquare,
+  Sigma,
+  Waves,
+  Calculator,
+  Play,
+} from "lucide-react";
+const MathLab = dynamic(() => import("@/components/math-lab"), {
+  loading: () => <p className="empty-note">Loading the mathematics engine…</p>,
+});
+const tabs = [
+  { name: "Circuit", icon: CircuitBoard },
+  { name: "C++", icon: Code2 },
+  { name: "Calculus", icon: FunctionSquare },
+  { name: "Probability", icon: Calculator },
+  { name: "Discrete", icon: Sigma },
+  { name: "Physics", icon: Waves },
 ];
-
 export function SimulatorLab() {
-  const [lab, setLab] = useState<Lab>("Circuit");
-  return <div className="simulator-shell"><div className="lab-switcher workspace-panel" role="tablist" aria-label="Learning labs">{labs.map(({ name, icon: Icon }) => <button role="tab" aria-selected={lab === name} className={lab === name ? "active" : ""} key={name} onClick={() => setLab(name)}><Icon size={16} />{name}</button>)}</div>{lab === "Circuit" ? <LogicLab /> : null}{lab === "C++" ? <CodeLab /> : null}{lab === "Probability" ? <ProbabilityLab /> : null}{lab === "Calculus" ? <CalculusLab /> : null}{lab === "Discrete" ? <DiscreteLab /> : null}{lab === "Physics" ? <PhysicsLab /> : null}</div>;
+  const [lab, setLab] = useState("Circuit");
+  return (
+    <div className="simulator-shell">
+      <div
+        className="lab-switcher workspace-panel"
+        role="group"
+        aria-label="Learning labs"
+      >
+        {tabs.map(({ name, icon: Icon }) => (
+          <button
+            aria-pressed={lab === name}
+            className={lab === name ? "active" : ""}
+            key={name}
+            onClick={() => setLab(name)}
+          >
+            <Icon size={16} />
+            {name}
+          </button>
+        ))}
+      </div>
+      {lab === "Circuit" ? (
+        <ExternalLab
+          key="circuit"
+          title="The real circuit lab."
+          eyebrow="LOGISIM · OPEN SOURCE"
+          description="Gates, wires, clocks, multiplexers, registers, RAM, and your own subcircuits. Open the full Logisim engine when you’re ready to build."
+          url="https://logisim.app/"
+          label="Logisim"
+        />
+      ) : lab === "C++" ? (
+        <ExternalLab
+          key="cpp"
+          title="Write it. Run it. Understand it."
+          eyebrow="C++ · ONECOMPILER"
+          description="The working compiler from your original EduMoe. Edit the program, provide input, and run real C++ in a remote sandbox."
+          url="https://onecompiler.com/embed/cpp?theme=dark&hideTitle=true&hideNew=true&hideStdin=false"
+          label="C++ compiler"
+        />
+      ) : (
+        <MathLab lab={lab} />
+      )}
+    </div>
+  );
 }
-
-function LogicLab() {
-  const [a, setA] = useState(false); const [b, setB] = useState(true); const [gate, setGate] = useState("AND");
-  const evaluate = (x: boolean, y: boolean) => gate === "AND" ? x && y : gate === "OR" ? x || y : gate === "XOR" ? x !== y : gate === "NAND" ? !(x && y) : gate === "NOR" ? !(x || y) : x === y;
-  const output = evaluate(a, b);
-  const parts = [{ icon: ToggleLeft, name: "Input" }, { icon: CircuitBoard, name: "Gate" }, { icon: Clock3, name: "Clock" }, { icon: GitBranch, name: "MUX" }];
-  return <section className="lab-panel glass-panel logic-workbench"><div className="lab-toolbar"><div><span className="section-kicker">Digital logic · Logisim workflow</span><h2>Real circuit bench</h2></div><a className="run-button" href="https://logisim.app/" target="_blank" rel="noreferrer">Open full Logisim <ArrowUpRight size={15} /></a></div>
-    <div className="circuit-workspace"><aside className="component-palette"><strong>Components</strong>{parts.map(({icon:Icon,name}) => <button key={name}><Icon size={15} />{name}</button>)}<small>Full adders, registers, decoders, RAM, ROM, and custom subcircuits open in Logisim.</small></aside><div className="circuit-canvas"><div className="gate-picker">{["AND","OR","XOR","NAND","NOR","XNOR"].map((item) => <button className={gate === item ? "active" : ""} key={item} onClick={() => setGate(item)}>{item}</button>)}</div><div className="logic-stage"><button className={a ? "on" : ""} onClick={() => setA((value) => !value)}><span>Input A</span><strong>{Number(a)}</strong></button><button className={b ? "on" : ""} onClick={() => setB((value) => !value)}><span>Input B</span><strong>{Number(b)}</strong></button><div className="gate-node"><CircuitBoard size={24} /><strong>{gate}</strong></div><div className={output ? "logic-output on" : "logic-output"}><span>Output</span><strong>{Number(output)}</strong></div></div><div className="truth-table"><span>A</span><span>B</span><span>{gate}</span>{[[false,false],[false,true],[true,false],[true,true]].flatMap(([x,y]) => [<b key={`${x}${y}a`}>{Number(x)}</b>,<b key={`${x}${y}b`}>{Number(y)}</b>,<b key={`${x}${y}o`}>{Number(evaluate(x,y))}</b>])}</div></div></div></section>;
+function ExternalLab({
+  title,
+  eyebrow,
+  description,
+  url,
+  label,
+}: {
+  title: string;
+  eyebrow: string;
+  description: string;
+  url: string;
+  label: string;
+}) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <section className="lab-panel glass-panel">
+      <div className="lab-toolbar">
+        <div>
+          <span className="section-kicker">{eyebrow}</span>
+          <h2>{title}</h2>
+        </div>
+        <a className="run-button" href={url} target="_blank" rel="noreferrer">
+          Open full screen <ArrowUpRight size={15} />
+        </a>
+      </div>
+      {loaded ? (
+        <>
+          <iframe
+            className="external-lab"
+            src={url}
+            title={label}
+            allow="fullscreen; clipboard-write"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+          <p className="lab-note">
+            If your browser blocks the embedded tool, use Open full screen. Save
+            your work using the tool’s export controls.
+          </p>
+        </>
+      ) : (
+        <div className="lab-launch">
+          <CircuitBoard size={45} />
+          <h3>Your workbench is ready.</h3>
+          <p>{description}</p>
+          <button
+            className="button button-primary"
+            onClick={() => setLoaded(true)}
+          >
+            <Play size={15} /> Load {label}
+          </button>
+          <small>Loads only when you ask, to keep mobile browsing light.</small>
+        </div>
+      )}
+    </section>
+  );
 }
-
-function CodeLab() { const [ran, setRan] = useState(false); return <section className="lab-panel glass-panel"><div className="lab-toolbar"><div><span className="section-kicker">Structured Programming</span><h2>C++ trace lab</h2></div><button className="run-button" onClick={() => setRan(true)}><Play size={15} /> Run</button></div><div className="code-lab-grid"><pre><code>{`#include <iostream>\nusing namespace std;\n\nint main() {\n  int score = 95;\n  int* ptr = &score;\n  *ptr += 5;\n  cout << score;\n}`}</code></pre><div className="console"><span>Output</span><p>{ran ? "> 100\n\nProcess finished successfully." : "Run the program to inspect its output."}</p></div></div></section>; }
-
-function ProbabilityLab() { const [lambda, setLambda] = useState(3); const bars = useMemo(() => Array.from({length: 9}, (_, k) => Math.round(Math.pow(lambda,k) * Math.exp(-lambda) / factorial(k) * 100)), [lambda]); return <section className="lab-panel glass-panel"><div className="lab-toolbar"><div><span className="section-kicker">Probability</span><h2>Poisson explorer</h2></div><label>λ = <strong>{lambda}</strong><input type="range" min="1" max="7" value={lambda} onChange={(event) => setLambda(Number(event.target.value))} /></label></div><div className="distribution-chart" aria-label="Poisson probability chart">{bars.map((bar,index) => <div key={index}><span style={{ height: `${Math.max(8, bar * 3)}px` }} /><small>{index}</small></div>)}</div><p className="lab-note"><Check size={15} /> Mean = variance = λ. Move the slider and watch the mass shift.</p></section>; }
-function factorial(value: number): number { return value <= 1 ? 1 : value * factorial(value - 1); }
-
-function CalculusLab() { const [expression, setExpression] = useState("x^2 + 3x"); const result = expression.replaceAll(" ", "") === "sin(x)" ? "cos(x)" : expression.replaceAll(" ", "") === "x^3" ? "3x²" : "2x + 3"; return <section className="lab-panel glass-panel"><div className="lab-toolbar"><div><span className="section-kicker">Calculus</span><h2>Derivative explorer</h2></div></div><label className="math-input"><span>f(x)</span><input value={expression} onChange={(event) => setExpression(event.target.value)} /></label><div className="solution-card"><span>Symbolic walkthrough</span><strong>{result}</strong><p>Try x^2 + 3x, x^3, or sin(x). The browser computes these known first-year cases without calling an AI model.</p></div><button className="reset-link" onClick={() => setExpression("x^2 + 3x")}><RotateCcw size={14} /> Reset example</button></section>; }
-
-function DiscreteLab() { const [vertices, setVertices] = useState(5); const completeEdges = vertices * (vertices - 1) / 2; return <section className="lab-panel glass-panel"><div className="lab-toolbar"><div><span className="section-kicker">Discrete mathematics</span><h2>Graph theory counter</h2></div><label>Vertices <strong>{vertices}</strong><input type="range" min="2" max="12" value={vertices} onChange={(event) => setVertices(Number(event.target.value))} /></label></div><div className="formula-stage"><span>K<sub>{vertices}</sub></span><strong>{completeEdges} edges</strong><p>A complete graph connects every unordered pair, so |E| = n(n−1)/2.</p></div></section>; }
-
-function PhysicsLab() { const [voltage, setVoltage] = useState(9); const [resistance, setResistance] = useState(220); const current = voltage / resistance * 1000; return <section className="lab-panel glass-panel"><div className="lab-toolbar"><div><span className="section-kicker">Physics</span><h2>Ohm&apos;s law bench</h2></div></div><div className="physics-controls"><label>Voltage <strong>{voltage} V</strong><input type="range" min="1" max="24" value={voltage} onChange={(e) => setVoltage(Number(e.target.value))} /></label><label>Resistance <strong>{resistance} Ω</strong><input type="range" min="100" max="1000" step="10" value={resistance} onChange={(e) => setResistance(Number(e.target.value))} /></label></div><div className="formula-stage"><span>I = V / R</span><strong>{current.toFixed(1)} mA</strong><p>Power: {(voltage * voltage / resistance).toFixed(3)} W</p></div></section>; }

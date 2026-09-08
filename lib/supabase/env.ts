@@ -1,8 +1,12 @@
-function requirePublicEnv(name: "NEXT_PUBLIC_SUPABASE_URL" | "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY") {
+function requirePublicEnv(
+  name: "NEXT_PUBLIC_SUPABASE_URL" | "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+) {
   const value = process.env[name];
 
   if (!value) {
-    throw new Error(`Missing ${name}. Copy .env.example to .env.local and add the project value.`);
+    throw new Error(
+      `Missing ${name}. Copy .env.example to .env.local and add the project value.`,
+    );
   }
 
   return value;

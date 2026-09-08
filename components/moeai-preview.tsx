@@ -2,7 +2,10 @@ import { ArrowUp, BookOpen, CheckCircle2, Sparkles } from "lucide-react";
 
 export function MoeAiPreview() {
   return (
-    <div className="ai-stage" aria-label="Preview of MoeAI's tutoring experience">
+    <div
+      className="ai-stage"
+      aria-label="Preview of MoeAI's tutoring experience"
+    >
       <div className="ai-glow" aria-hidden="true" />
       <section className="ai-window glass-panel">
         <header className="ai-window-header">
@@ -12,23 +15,33 @@ export function MoeAiPreview() {
             </span>
             <span>
               <strong>MoeAI</strong>
-              <small><i /> Curriculum connected</small>
+              <small>
+                <i /> Curriculum connected
+              </small>
             </span>
           </div>
           <span className="preview-label">Preview</span>
         </header>
 
         <div className="chat-thread">
-          <div className="student-message">Why does a pointer store an address instead of the value?</div>
+          <div className="student-message">
+            Why does a pointer store an address instead of the value?
+          </div>
           <div className="tutor-message">
-            <span className="tiny-orb"><Sparkles size={12} aria-hidden="true" /></span>
+            <span className="tiny-orb">
+              <Sparkles size={12} aria-hidden="true" />
+            </span>
             <div>
               <p>
-                Think of a pointer as a campus room number. The room number is not the student—it tells
-                you exactly where to find them.
+                Think of a pointer as a campus room number. The room number is
+                not the student—it tells you exactly where to find them.
               </p>
-              <div className="code-line"><span>int</span> score = 95; <em>{"// the value"}</em></div>
-              <div className="code-line"><span>int*</span> ptr = &amp;score; <em>{"// its address"}</em></div>
+              <div className="code-line">
+                <span>int</span> score = 95; <em>{"// the value"}</em>
+              </div>
+              <div className="code-line">
+                <span>int*</span> ptr = &amp;score; <em>{"// its address"}</em>
+              </div>
             </div>
           </div>
           <div className="source-chip">

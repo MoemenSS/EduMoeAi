@@ -1,24 +1,40 @@
 # EduMoeAi
 
-EduMoeAi is an AI-native educational platform beginning with Egyptian university students and designed to scale further globally.
+A Next.js 16 / React 19 / TypeScript learning platform for FUE Computer Science students, connected to Supabase and deployed on Vercel.
 
-It is not a generic courses page with an API wrapper:
+## Run
 
-- **EduMoe** is the free educational environment for courses, quizzes, simulators, progress, and community.
-- **MoeAI** is the curriculum-aware intelligence layer for tutoring, personalization, and proactive learning support.
+Node.js 24 is required.
 
-## Local development
+```sh
+npm ci
+cp .env.example .env.local
+npm run dev
+```
 
-1. Install dependencies with `npm install`.
-2. Copy `.env.example` to `.env.local` and add the Supabase project URL and publishable key.
-3. Start the app with `npm run dev`.
-4. Open `http://localhost:3000`.
+Set only the public Supabase URL and publishable key in the public environment variables. Never put service-role keys in `NEXT_PUBLIC_*` variables.
 
-## Available today
+```sh
+npm run typecheck
+npm run lint
+npm run build
+```
 
-- Professional, responsive EduMoe homepage
-- Courses overview route
-- Supabase browser/server client boundaries
-- Vercel-ready Next.js App Router structure
+## Structure
 
-The repository separates implemented functionality from product previews. No homepage preview claims to be a live feature before its underlying workflow exists.
+- `app/`: page routes, auth callback, and authenticated admin server actions.
+- `components/`: student workspaces and admin editors.
+- `lib/`: course design metadata, content access, practice seed, shared learning calculations, Supabase clients.
+- `content/`: original starter reading seed.
+- `database/`: reviewed database operations and rollback-only verification scripts.
+- `design-reference/`: supplied original HTML, preserved outside the production public directory.
+- `public/brand/`: SVG wordmark and app mark.
+- `docs/`: release status, verification evidence, and third-party notices.
+
+Course and practice content comes from Supabase. The checked-in question bank is seed/reference data; admin edits in the database control the published practice library. Ranked challenges use a separate private answer bank and server scoring.
+
+## Deployment
+
+`vercel.json` explicitly selects the Next.js framework. Deploy from the linked project directory with `vercel --prod`, or push to the connected GitHub production branch. The public deployment is https://edu-moe-ai.vercel.app/.
+
+See `docs/release-status.md` for what is implemented and what still requires configuration or content. SQL operation files describe migrations already applied to the linked project; do not blindly rerun them against production.

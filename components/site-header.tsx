@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowUpRight, Menu } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 
+import { AppearanceControls } from "@/components/appearance-controls";
+
 const links = [
   { label: "Dashboard", href: "/dashboard" },
   { label: "Courses", href: "/courses" },
@@ -26,10 +28,12 @@ export function SiteHeader() {
         ))}
       </nav>
 
-      <Link className="header-cta" href="/moeai">
-        Ask MoeAI <ArrowUpRight size={15} aria-hidden="true" />
-      </Link>
-
+      <div className="header-actions">
+        <AppearanceControls />
+        <Link className="header-cta" href="/moeai">
+          Ask MoeAI <ArrowUpRight size={15} aria-hidden="true" />
+        </Link>
+      </div>
       <details className="mobile-nav">
         <summary aria-label="Open navigation">
           <Menu size={20} aria-hidden="true" />

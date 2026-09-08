@@ -1,0 +1,4600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#08090d" />
+
+<title>MoeAI · Computer Science</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet"
+/>
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+/>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+></script>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+></script>
+
+<style>
+/* =========================================================
+   MOEAI — LIQUID DARK INTERFACE
+   ========================================================= */
+
+:root {
+  --bg: #07080c;
+  --bg-deep: #05060a;
+  --surface: rgba(20, 22, 30, 0.58);
+  --surface-strong: rgba(26, 29, 39, 0.72);
+  --surface-soft: rgba(255, 255, 255, 0.045);
+
+  --white: #f7f8fb;
+  --text: rgba(247, 248, 251, 0.92);
+  --muted: rgba(206, 211, 223, 0.58);
+  --faint: rgba(177, 183, 198, 0.38);
+
+  --pink: #ff426f;
+  --pink-light: #ff7d99;
+  --pink-deep: #a81242;
+
+  --blue: #63a7ff;
+  --cyan: #55d8e9;
+  --violet: #9b8cff;
+  --green: #6ee7a1;
+  --yellow: #f7ca72;
+  --red: #ff637d;
+
+  --glass-border: rgba(255, 255, 255, 0.095);
+  --glass-border-bright: rgba(255, 255, 255, 0.16);
+
+  --shadow:
+    0 30px 80px rgba(0, 0, 0, 0.42),
+    0 8px 28px rgba(0, 0, 0, 0.28);
+
+  --inner:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.025);
+
+  --mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+
+  --radius-xl: 26px;
+  --radius-lg: 19px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--bg);
+}
+
+body {
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 55, 106, 0.07), transparent 30%),
+    radial-gradient(circle at 90% 100%, rgba(73, 126, 255, 0.055), transparent 28%),
+    var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 1px solid var(--pink-light);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: rgba(255, 66, 111, 0.28);
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================================
+   SVG ICON SYSTEM
+   ========================================================= */
+
+.icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex: none;
+}
+
+.icon-sm {
+  width: 14px;
+  height: 14px;
+}
+
+.icon-lg {
+  width: 19px;
+  height: 19px;
+}
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 70px 70px;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.92),
+    rgba(0,0,0,.72) 55%,
+    rgba(0,0,0,.96)
+  );
+}
+
+.background::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 15%,
+      rgba(4, 5, 9, 0.28) 58%,
+      rgba(4, 5, 9, 0.9) 100%
+    );
+}
+
+.ambient {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: .4;
+  will-change: transform;
+}
+
+.ambient.one {
+  width: 500px;
+  height: 500px;
+  top: -260px;
+  left: -130px;
+  background: rgba(255, 35, 93, .42);
+}
+
+.ambient.two {
+  width: 470px;
+  height: 470px;
+  right: -250px;
+  bottom: -190px;
+  background: rgba(62, 100, 255, .22);
+}
+
+.ambient.three {
+  width: 280px;
+  height: 280px;
+  top: 44%;
+  left: 44%;
+  background: rgba(168, 56, 255, .08);
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .022;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   CIRCUIT FIELD
+   ========================================================= */
+
+.circuit-field {
+  position: absolute;
+  inset: 0;
+  opacity: .35;
+}
+
+.trace {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(90, 150, 255, .28),
+    rgba(255, 255, 255, .12),
+    transparent
+  );
+}
+
+.trace::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(96, 175, 255, .5);
+  box-shadow: 0 0 12px rgba(96, 175, 255, .4);
+  top: -2px;
+}
+
+.trace.t1 {
+  width: 340px;
+  left: 4%;
+  top: 20%;
+  transform: rotate(13deg);
+}
+
+.trace.t1::after {
+  right: 15%;
+}
+
+.trace.t2 {
+  width: 420px;
+  right: 4%;
+  top: 31%;
+  transform: rotate(-12deg);
+}
+
+.trace.t2::after {
+  left: 22%;
+}
+
+.trace.t3 {
+  width: 280px;
+  left: 17%;
+  bottom: 16%;
+  transform: rotate(-8deg);
+}
+
+.trace.t3::after {
+  right: 8%;
+}
+
+.trace.t4 {
+  width: 380px;
+  right: 14%;
+  bottom: 20%;
+  transform: rotate(7deg);
+}
+
+.trace.t4::after {
+  left: 16%;
+}
+
+.node {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border: 1px solid rgba(102, 174, 255, .42);
+  background: rgba(73, 113, 190, .16);
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(73, 140, 255, .16);
+}
+
+.node.n1 { left: 8%; top: 24%; }
+.node.n2 { left: 24%; top: 12%; }
+.node.n3 { right: 16%; top: 20%; }
+.node.n4 { right: 8%; bottom: 28%; }
+.node.n5 { left: 12%; bottom: 13%; }
+.node.n6 { left: 38%; bottom: 8%; }
+
+.equation {
+  position: absolute;
+  color: rgba(180, 189, 213, .075);
+  font-family: var(--mono);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.eq1 {
+  left: 5%;
+  top: 38%;
+  transform: rotate(-8deg);
+  font-size: 18px;
+}
+
+.eq2 {
+  right: 7%;
+  top: 14%;
+  transform: rotate(8deg);
+  font-size: 13px;
+}
+
+.eq3 {
+  right: 17%;
+  bottom: 13%;
+  transform: rotate(-4deg);
+  font-size: 17px;
+}
+
+.code-ghost {
+  position: absolute;
+  font-family: var(--mono);
+  color: rgba(190, 199, 222, .055);
+  line-height: 1.75;
+  white-space: pre;
+  user-select: none;
+}
+
+.ghost-one {
+  top: 11%;
+  left: 7%;
+  font-size: 11px;
+  transform: rotate(-4deg);
+}
+
+.ghost-two {
+  right: 4%;
+  bottom: 30%;
+  font-size: 10px;
+  transform: rotate(5deg);
+}
+
+/* =========================================================
+   LIQUID GLASS
+   ========================================================= */
+
+.glass {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.075),
+      rgba(255,255,255,.025) 38%,
+      rgba(255,255,255,.042)
+    ),
+    rgba(15, 17, 24, .56);
+
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    var(--shadow),
+    var(--inner);
+
+  backdrop-filter:
+    blur(34px)
+    saturate(175%)
+    contrast(104%);
+
+  -webkit-backdrop-filter:
+    blur(34px)
+    saturate(175%)
+    contrast(104%);
+}
+
+.glass::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      420px 130px at 8% -5%,
+      rgba(255,255,255,.12),
+      transparent 62%
+    ),
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.045),
+      transparent 35%
+    );
+}
+
+.glass::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  left: 9%;
+  right: 9%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.34),
+    transparent
+  );
+  opacity: .45;
+}
+
+.glass > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+.app {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 252px minmax(0, 1fr) 304px;
+  gap: 12px;
+  height: 100vh;
+  padding: 12px;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+  min-height: 0;
+  padding: 14px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 3px 15px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.brand-symbol {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.035));
+  border: 1px solid rgba(255,255,255,.13);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 7px 22px rgba(0,0,0,.25);
+}
+
+.brand-symbol::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1.5px solid var(--pink-light);
+  box-shadow:
+    7px 7px 0 -5px var(--pink-light),
+    0 0 15px rgba(255,66,111,.24);
+}
+
+.brand-copy {
+  min-width: 0;
+}
+
+.brand-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -.25px;
+}
+
+.brand-meta {
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 9px;
+  margin-top: 2px;
+  letter-spacing: .3px;
+}
+
+/* New chat */
+
+.new-chat {
+  width: 100%;
+  height: 38px;
+  margin: 13px 0 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 57, 104, .94),
+      rgba(186, 24, 76, .88)
+    );
+  box-shadow:
+    0 9px 24px rgba(225, 29, 72, .2),
+    inset 0 1px 0 rgba(255,255,255,.25);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.new-chat:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 13px 30px rgba(225, 29, 72, .28),
+    inset 0 1px 0 rgba(255,255,255,.28);
+}
+
+.new-chat:active {
+  transform: translateY(0) scale(.985);
+}
+
+/* Search */
+
+.search {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.065);
+  border-radius: 10px;
+  background: rgba(0,0,0,.12);
+}
+
+.search .icon {
+  color: var(--faint);
+}
+
+.search input {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 11px;
+}
+
+.search input::placeholder {
+  color: rgba(196,201,216,.38);
+}
+
+/* Sidebar labels */
+
+.section-label {
+  margin: 17px 3px 7px;
+  color: rgba(184,191,207,.38);
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+
+/* Modes */
+
+.mode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mode {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 35px;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background .16s ease,
+    border-color .16s ease,
+    color .16s ease,
+    transform .16s ease;
+}
+
+.mode:hover {
+  background: rgba(255,255,255,.042);
+  color: var(--text);
+}
+
+.mode.active {
+  border-color: rgba(255,255,255,.075);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,66,111,.115),
+      rgba(255,255,255,.032)
+    );
+  color: var(--white);
+}
+
+.mode-icon {
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: rgba(255,255,255,.045);
+  color: var(--faint);
+  transition: .18s ease;
+}
+
+.mode.active .mode-icon {
+  color: var(--pink-light);
+  background: rgba(255,66,111,.11);
+}
+
+.mode-text {
+  min-width: 0;
+}
+
+.mode-name {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.mode-desc {
+  display: block;
+  margin-top: 1px;
+  color: rgba(181,187,201,.4);
+  font-family: var(--mono);
+  font-size: 8.5px;
+}
+
+.mode.active::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 17px;
+  right: 3px;
+  border-radius: 99px;
+  background: var(--pink-light);
+  box-shadow: 0 0 12px rgba(255,66,111,.42);
+}
+
+/* History */
+
+.history {
+  flex: 1;
+  min-height: 50px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.history-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px;
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.history-item:hover {
+  background: rgba(255,255,255,.035);
+  color: var(--text);
+}
+
+.history-icon {
+  color: rgba(180,187,202,.3);
+}
+
+.history-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.history-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10.5px;
+}
+
+.history-time {
+  margin-top: 2px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+/* Sidebar bottom */
+
+.profile-card {
+  margin-top: 11px;
+  padding: 11px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.065);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.05),
+      rgba(255,255,255,.018)
+    );
+}
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.avatar {
+  width: 31px;
+  height: 31px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 35% 25%, #ff93a9, #e22959 50%, #74112f);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    0 5px 18px rgba(225,29,72,.18);
+}
+
+.profile-name {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.profile-meta {
+  margin-top: 2px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+.profile-more {
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--faint);
+  cursor: pointer;
+}
+
+.profile-more:hover {
+  color: var(--text);
+  background: rgba(255,255,255,.06);
+}
+
+.profile-line {
+  height: 1px;
+  margin: 10px 0 8px;
+  background: rgba(255,255,255,.055);
+}
+
+.profile-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+.profile-stats strong {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.progress {
+  height: 3px;
+  margin-top: 7px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(255,255,255,.07);
+}
+
+.progress > span {
+  display: block;
+  width: 68%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--pink-deep), var(--pink-light));
+}
+
+/* =========================================================
+   CENTER
+   ========================================================= */
+
+.center {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Topbar */
+
+.topbar {
+  min-height: 57px;
+  padding: 9px 13px;
+  display: flex;
+  align-items: center;
+  border-radius: 17px;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.mobile-menu,
+.context-button {
+  width: 31px;
+  height: 31px;
+  display: none;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.mobile-menu:hover,
+.context-button:hover {
+  background: rgba(255,255,255,.055);
+  color: white;
+}
+
+.top-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.1),
+      rgba(255,255,255,.035)
+    );
+  border: 1px solid rgba(255,255,255,.08);
+  color: var(--pink-light);
+}
+
+.top-copy {
+  min-width: 0;
+}
+
+.top-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -.1px;
+}
+
+.top-subtitle {
+  margin-top: 2px;
+  overflow: hidden;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+}
+
+.engine-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 27px;
+  padding: 0 9px;
+  border: 1px solid rgba(255,255,255,.075);
+  border-radius: 999px;
+  background: rgba(255,255,255,.035);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 8.5px;
+}
+
+.engine-mark {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 9px rgba(110,231,161,.3);
+}
+
+/* =========================================================
+   THREAD
+   ========================================================= */
+
+.thread {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 2px 4px 5px;
+  scroll-behavior: smooth;
+}
+
+.thread-inner {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+/* Welcome */
+
+.welcome {
+  position: relative;
+  max-width: 710px;
+  margin: 7vh auto 0;
+}
+
+.welcome-orbit {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 19px;
+}
+
+.orbit-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 18px;
+  transform: rotate(12deg);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,.018)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.15),
+    0 18px 35px rgba(0,0,0,.24);
+}
+
+.orbit-ring::before,
+.orbit-ring::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.orbit-ring::before {
+  width: 9px;
+  height: 9px;
+  right: 9px;
+  top: 9px;
+  background: var(--pink-light);
+  box-shadow: 0 0 18px rgba(255,66,111,.5);
+}
+
+.orbit-ring::after {
+  width: 6px;
+  height: 6px;
+  left: 10px;
+  bottom: 10px;
+  background: var(--blue);
+  box-shadow: 0 0 15px rgba(99,167,255,.4);
+}
+
+.welcome-core {
+  position: absolute;
+  inset: 14px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(8,9,13,.45);
+}
+
+.welcome-core svg {
+  width: 20px;
+  color: white;
+}
+
+.eyebrow {
+  margin-bottom: 9px;
+  color: var(--pink-light);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.welcome h1 {
+  max-width: 650px;
+  color: var(--white);
+  font-size: clamp(27px, 3.2vw, 40px);
+  line-height: 1.08;
+  letter-spacing: -1.6px;
+  font-weight: 700;
+}
+
+.welcome h1 span {
+  color: rgba(247,248,251,.46);
+}
+
+.welcome-copy {
+  max-width: 560px;
+  margin-top: 13px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 8px;
+  margin-top: 23px;
+}
+
+.quick-card {
+  position: relative;
+  min-height: 74px;
+  padding: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.075);
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.052),
+      rgba(255,255,255,.018)
+    );
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    background .18s ease;
+}
+
+.quick-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,125,153,.27);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,66,111,.075),
+      rgba(255,255,255,.025)
+    );
+}
+
+.quick-card::after {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  right: -55px;
+  bottom: -65px;
+  border-radius: 50%;
+  background: rgba(255,66,111,.08);
+  filter: blur(20px);
+}
+
+.quick-icon {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  color: var(--pink-light);
+  background: rgba(255,255,255,.05);
+}
+
+.quick-title {
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.quick-desc {
+  margin-top: 3px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+/* Messages */
+
+.message {
+  display: flex;
+  gap: 10px;
+  margin: 0 auto 22px;
+  animation: message-in .22s ease both;
+}
+
+@keyframes message-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.ai-avatar {
+  width: 27px;
+  height: 27px;
+  flex: none;
+  margin-top: 2px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,.09);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,.025)
+    );
+  color: var(--pink-light);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.message-content {
+  min-width: 0;
+  max-width: min(82%, 680px);
+}
+
+.message.user .message-content {
+  max-width: min(78%, 570px);
+}
+
+.message-text {
+  color: rgba(247,248,251,.87);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.message.user .message-text {
+  padding: 10px 13px;
+  border-radius: 15px 15px 4px 15px;
+  border: 1px solid rgba(255,125,153,.17);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,66,111,.18),
+      rgba(155,35,71,.075)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.09),
+    0 8px 25px rgba(0,0,0,.14);
+}
+
+.message-text p {
+  margin-bottom: 9px;
+}
+
+.message-text p:last-child {
+  margin-bottom: 0;
+}
+
+.message-text strong {
+  color: white;
+  font-weight: 650;
+}
+
+.message-text code:not(pre code) {
+  padding: 2px 5px;
+  border-radius: 5px;
+  color: #ff9ab0;
+  background: rgba(255,255,255,.065);
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+.mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.mode-pill-icon {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--pink-light);
+}
+
+/* Message metadata */
+
+.message-footer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 5px;
+  color: rgba(174,181,197,.32);
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+.message.user .message-footer {
+  justify-content: flex-end;
+}
+
+.message-actions {
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+
+.message.ai:hover .message-actions {
+  opacity: 1;
+}
+
+.message-action {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(190,197,211,.42);
+  cursor: pointer;
+}
+
+.message-action:hover {
+  background: rgba(255,255,255,.055);
+  color: var(--pink-light);
+}
+
+/* =========================================================
+   C++ CODE WORKBENCH
+   ========================================================= */
+
+.code-shell {
+  margin-top: 11px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.095);
+  border-radius: 15px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(18,20,27,.92),
+      rgba(8,9,13,.94)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 14px 34px rgba(0,0,0,.25);
+}
+
+.code-top {
+  height: 39px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  background: rgba(255,255,255,.025);
+}
+
+.window-dots {
+  display: flex;
+  gap: 5px;
+  margin-right: 11px;
+}
+
+.window-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.16);
+}
+
+.window-dot:first-child {
+  background: rgba(255,100,120,.65);
+}
+
+.window-dot:nth-child(2) {
+  background: rgba(255,190,90,.55);
+}
+
+.window-dot:last-child {
+  background: rgba(110,231,161,.55);
+}
+
+.code-tab {
+  height: 27px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 9px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 7px;
+  background: rgba(255,255,255,.045);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 8.5px;
+}
+
+.cpp-logo {
+  color: #72a9ff;
+}
+
+.code-head-actions {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.code-button {
+  height: 27px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 7px;
+  background: rgba(255,255,255,.025);
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+.code-button:hover {
+  border-color: rgba(255,255,255,.14);
+  color: white;
+  background: rgba(255,255,255,.055);
+}
+
+.code-button.run {
+  color: #8beab0;
+  border-color: rgba(110,231,161,.14);
+}
+
+.code-body {
+  display: grid;
+  grid-template-columns: 40px minmax(0,1fr);
+  max-height: 390px;
+  overflow: auto;
+}
+
+.line-numbers {
+  padding: 13px 7px 15px 0;
+  color: rgba(149,157,175,.22);
+  border-right: 1px solid rgba(255,255,255,.045);
+  font: 10px/1.72 var(--mono);
+  text-align: right;
+  user-select: none;
+}
+
+.code-content {
+  min-width: 0;
+  overflow-x: auto;
+  padding: 13px 15px 15px;
+}
+
+.code-content pre {
+  margin: 0;
+  color: #d9dde7;
+  font: 10.5px/1.72 var(--mono);
+  white-space: pre;
+}
+
+.kw { color: #c697ff; }
+.type { color: #69b9ff; }
+.fn { color: #f5c16c; }
+.str { color: #8ed69d; }
+.num { color: #ff9cbd; }
+.comment { color: rgba(156,165,182,.38); }
+.op { color: #c4c9d4; }
+.var { color: #e5e8ef; }
+.prep { color: #ff7997; }
+
+.code-output {
+  display: none;
+  border-top: 1px solid rgba(255,255,255,.06);
+  background: rgba(0,0,0,.2);
+}
+
+.code-output.show {
+  display: block;
+}
+
+.output-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(255,255,255,.045);
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+.output-status {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.output-body {
+  padding: 10px 13px;
+  color: rgba(219,225,234,.7);
+  font: 10px/1.65 var(--mono);
+}
+
+.output-body .success {
+  color: var(--green);
+}
+
+.output-body .muted {
+  color: var(--faint);
+}
+
+/* =========================================================
+   THINKING — STATIC, NO BLINKING DOTS
+   ========================================================= */
+
+.thinking-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 27px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+.thinking-line {
+  width: 24px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,125,153,.65),
+    transparent
+  );
+}
+
+/* =========================================================
+   COMPOSER
+   ========================================================= */
+
+.composer-zone {
+  flex: none;
+}
+
+.attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 5px 7px;
+}
+
+.attachment {
+  height: 27px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 7px 0 9px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.07);
+  background: rgba(20,22,30,.65);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+.attachment-remove {
+  width: 17px;
+  height: 17px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--faint);
+  cursor: pointer;
+}
+
+.attachment-remove:hover {
+  color: var(--pink-light);
+  background: rgba(255,255,255,.05);
+}
+
+.composer {
+  min-height: 57px;
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  padding: 7px 8px 7px 14px;
+  border-radius: 17px;
+}
+
+.composer textarea {
+  min-width: 0;
+  flex: 1;
+  max-height: 150px;
+  min-height: 40px;
+  resize: none;
+  border: 0;
+  outline: 0;
+  padding: 10px 0 7px;
+  background: transparent;
+  color: var(--text);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.composer textarea::placeholder {
+  color: rgba(181,187,202,.36);
+}
+
+.composer-tool {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(190,197,210,.5);
+  cursor: pointer;
+  transition: .15s ease;
+}
+
+.composer-tool:hover {
+  color: var(--text);
+  background: rgba(255,255,255,.05);
+}
+
+.send {
+  width: 35px;
+  height: 35px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      145deg,
+      #ff5a7f,
+      #c91f50
+    );
+  color: white;
+  cursor: pointer;
+  box-shadow:
+    0 7px 20px rgba(225,29,72,.22),
+    inset 0 1px 0 rgba(255,255,255,.24);
+  transition: .16s ease;
+}
+
+.send:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 10px 25px rgba(225,29,72,.3),
+    inset 0 1px 0 rgba(255,255,255,.28);
+}
+
+.send:disabled {
+  opacity: .35;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
+.composer-meta {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 6px 0;
+  color: rgba(174,181,197,.28);
+  font-family: var(--mono);
+  font-size: 7.5px;
+}
+
+.command-menu {
+  position: absolute;
+  left: 7px;
+  bottom: calc(100% + 8px);
+  width: 250px;
+  max-height: 310px;
+  overflow: auto;
+  padding: 6px;
+  border-radius: 14px;
+  display: none;
+}
+
+.command-menu.open {
+  display: block;
+}
+
+.command-item {
+  width: 100%;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.command-item:hover {
+  background: rgba(255,255,255,.055);
+  color: white;
+}
+
+.command-icon {
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: rgba(255,255,255,.05);
+  color: var(--pink-light);
+}
+
+.command-name {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.command-desc {
+  margin-top: 1px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 7.5px;
+}
+
+/* =========================================================
+   RIGHT PANEL
+   ========================================================= */
+
+.right-panel {
+  min-height: 0;
+  overflow: auto;
+  padding: 14px;
+  border-radius: var(--radius-xl);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 2px 13px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.panel-label {
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+
+.panel-close {
+  display: none;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--faint);
+  cursor: pointer;
+}
+
+.panel-close:hover {
+  background: rgba(255,255,255,.05);
+  color: white;
+}
+
+/* Context */
+
+.context-card {
+  position: relative;
+  margin-top: 12px;
+  padding: 13px;
+  min-height: 107px;
+  overflow: hidden;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,.075);
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(255,66,111,.12),
+      transparent 43%
+    ),
+    rgba(255,255,255,.03);
+}
+
+.context-card::after {
+  content: "C++";
+  position: absolute;
+  right: -4px;
+  bottom: -13px;
+  color: rgba(255,255,255,.025);
+  font: 700 58px var(--mono);
+}
+
+.context-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 10px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.06);
+  color: var(--blue);
+}
+
+.context-title {
+  font-size: 11.5px;
+  font-weight: 650;
+}
+
+.context-sub {
+  margin-top: 3px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+}
+
+/* Panel sections */
+
+.panel-section {
+  margin-top: 18px;
+}
+
+.panel-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+.panel-section-title span:last-child {
+  color: rgba(181,188,203,.28);
+}
+
+/* Concepts */
+
+.concept {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 40px;
+  padding: 7px;
+  margin-bottom: 5px;
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: 10px;
+  background: rgba(255,255,255,.025);
+}
+
+.concept-icon {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: var(--pink-light);
+  background: rgba(255,255,255,.045);
+}
+
+.concept-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.concept-name {
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+.concept-value {
+  margin-top: 2px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 7.5px;
+}
+
+.mini-progress {
+  width: 44px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(255,255,255,.07);
+}
+
+.mini-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--pink), var(--pink-light));
+}
+
+/* Tool grid */
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 7px;
+}
+
+.tool {
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 11px;
+  background: rgba(255,255,255,.028);
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  transition: .16s ease;
+}
+
+.tool:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.13);
+  background: rgba(255,255,255,.05);
+  color: white;
+}
+
+.tool-icon {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: var(--blue);
+  background: rgba(99,167,255,.07);
+}
+
+.tool:nth-child(2) .tool-icon {
+  color: var(--violet);
+  background: rgba(155,140,255,.07);
+}
+
+.tool:nth-child(3) .tool-icon {
+  color: var(--cyan);
+  background: rgba(85,216,233,.07);
+}
+
+.tool:nth-child(4) .tool-icon {
+  color: var(--green);
+  background: rgba(110,231,161,.07);
+}
+
+.tool-title {
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.tool-meta {
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 7px;
+}
+
+/* System card */
+
+.system-card {
+  margin-top: 18px;
+  padding: 11px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px;
+  background: rgba(255,255,255,.025);
+}
+
+.system-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.system-row:last-child {
+  margin-bottom: 0;
+}
+
+.system-indicator {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.system-indicator.blue {
+  background: var(--blue);
+}
+
+.system-name {
+  flex: 1;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 7.5px;
+}
+
+.system-value {
+  color: rgba(222,226,235,.55);
+  font-family: var(--mono);
+  font-size: 7.5px;
+}
+
+/* =========================================================
+   BACKDROP
+   ========================================================= */
+
+.backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1180px) {
+  .app {
+    grid-template-columns: 252px minmax(0, 1fr);
+  }
+
+  .right-panel {
+    position: fixed;
+    z-index: 20;
+    top: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: 304px;
+    transform: translateX(calc(100% + 20px));
+    transition: transform .22s ease;
+  }
+
+  .right-panel.open {
+    transform: translateX(0);
+  }
+
+  .context-button {
+    display: grid;
+  }
+
+  .panel-close {
+    display: grid;
+  }
+}
+
+@media (max-width: 850px) {
+  body {
+    overflow: hidden;
+  }
+
+  .app {
+    grid-template-columns: 1fr;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .sidebar {
+    position: fixed;
+    z-index: 20;
+    top: 8px;
+    left: 8px;
+    bottom: 8px;
+    width: 255px;
+    transform: translateX(calc(-100% - 20px));
+    transition: transform .22s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu {
+    display: grid;
+  }
+
+  .backdrop.show {
+    display: block;
+  }
+
+  .welcome {
+    margin-top: 5vh;
+  }
+
+  .welcome h1 {
+    font-size: 29px;
+  }
+
+  .quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .message-content {
+    max-width: 90%;
+  }
+
+  .message.user .message-content {
+    max-width: 88%;
+  }
+
+  .top-subtitle {
+    display: none;
+  }
+}
+
+@media (max-width: 540px) {
+  .topbar {
+    min-height: 52px;
+  }
+
+  .engine-chip {
+    display: none;
+  }
+
+  .thread-inner {
+    padding: 0 8px;
+  }
+
+  .welcome {
+    margin-top: 3vh;
+  }
+
+  .welcome h1 {
+    font-size: 26px;
+    letter-spacing: -1px;
+  }
+
+  .welcome-copy {
+    font-size: 12px;
+  }
+
+  .quick-card {
+    min-height: 68px;
+  }
+
+  .message-text {
+    font-size: 13px;
+  }
+
+  .code-body {
+    grid-template-columns: 32px minmax(0,1fr);
+  }
+
+  .line-numbers {
+    font-size: 8px;
+  }
+
+  .code-content pre {
+    font-size: 9px;
+  }
+
+  .code-head-actions .code-button:first-child {
+    display: none;
+  }
+
+  .composer-meta span:first-child {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     BACKGROUND
+     ========================================================= -->
+
+<div class="background">
+
+  <div class="ambient one"></div>
+  <div class="ambient two"></div>
+  <div class="ambient three"></div>
+
+  <div class="circuit-field">
+    <div class="trace t1"></div>
+    <div class="trace t2"></div>
+    <div class="trace t3"></div>
+    <div class="trace t4"></div>
+
+    <div class="node n1"></div>
+    <div class="node n2"></div>
+    <div class="node n3"></div>
+    <div class="node n4"></div>
+    <div class="node n5"></div>
+    <div class="node n6"></div>
+
+    <div class="equation eq1">∫ f(x) dx → Σ P(X = x)</div>
+    <div class="equation eq2">T(n) = 2T(n/2) + O(n)</div>
+    <div class="equation eq3">V = IR &nbsp;&nbsp; ∧ &nbsp;&nbsp; A → B</div>
+
+    <div class="code-ghost ghost-one">01  #include &lt;iostream&gt;
+02  int main() {
+03      std::vector&lt;int&gt; data;
+04      std::sort(data.begin(), data.end());
+05      return 0;
+06  }</div>
+
+    <div class="code-ghost ghost-two">ptr → address
+stack → heap
+O(log n)
+0x7ffd...
+nullptr</div>
+  </div>
+</div>
+
+<div class="noise"></div>
+
+<!-- =========================================================
+     APP
+     ========================================================= -->
+
+<div class="app">
+
+  <!-- =======================================================
+       SIDEBAR
+       ======================================================= -->
+
+  <aside class="sidebar glass" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-symbol">
+        <svg class="icon" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M5 5h4v4H5zM11 11h4v4h-4z"
+            stroke="currentColor"
+            stroke-width="1.3"
+          />
+          <path
+            d="M9 7h2v6H9M7 9v2M11 7l4-2"
+            stroke="currentColor"
+            stroke-width="1.2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
+      <div class="brand-copy">
+        <div class="brand-name">MoeAI</div>
+        <div class="brand-meta">CS / ENGINEERING WORKSPACE</div>
+      </div>
+    </div>
+
+    <button class="new-chat" id="newChat">
+      <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+        <path
+          d="M10 4v12M4 10h12"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+        />
+      </svg>
+      New chat
+    </button>
+
+    <label class="search">
+      <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+        <circle
+          cx="8.7"
+          cy="8.7"
+          r="5.5"
+          stroke="currentColor"
+          stroke-width="1.35"
+        />
+        <path
+          d="M13 13l4 4"
+          stroke="currentColor"
+          stroke-width="1.35"
+          stroke-linecap="round"
+        />
+      </svg>
+
+      <input
+        id="search"
+        type="text"
+        autocomplete="off"
+        placeholder="Search chats"
+      />
+    </label>
+
+    <div class="section-label">Modes</div>
+
+    <div class="mode-list" id="modeList"></div>
+
+    <div class="section-label">Recent</div>
+
+    <div class="history" id="history"></div>
+
+    <div class="profile-card">
+
+      <div class="profile-top">
+
+        <div class="avatar">M</div>
+
+        <div>
+          <div class="profile-name">Moemen</div>
+          <div class="profile-meta">CS · engineering</div>
+        </div>
+
+        <button class="profile-more" title="Profile">
+          <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+            <circle cx="4" cy="10" r="1" fill="currentColor"/>
+            <circle cx="10" cy="10" r="1" fill="currentColor"/>
+            <circle cx="16" cy="10" r="1" fill="currentColor"/>
+          </svg>
+        </button>
+
+      </div>
+
+      <div class="profile-line"></div>
+
+      <div class="profile-stats">
+        <span>Today</span>
+        <strong id="quotaText">14 / 20</strong>
+      </div>
+
+      <div class="progress">
+        <span id="quotaProgress"></span>
+      </div>
+
+    </div>
+
+  </aside>
+
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- =======================================================
+       CENTER
+       ======================================================= -->
+
+  <main class="center">
+
+    <header class="topbar glass">
+
+      <div class="topbar-left">
+
+        <button
+          class="mobile-menu"
+          id="menuButton"
+          aria-label="Open navigation"
+        >
+          <svg class="icon" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M3 5h14M3 10h14M3 15h14"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+
+        <div class="top-icon">
+          <svg class="icon" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M5 5h4v4H5zM11 11h4v4h-4z"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+            <path
+              d="M9 7h2v6H9M7 9v2M11 7l4-2"
+              stroke="currentColor"
+              stroke-width="1.1"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+
+        <div class="top-copy">
+          <div class="top-title" id="topTitle">Standard</div>
+          <div class="top-subtitle" id="topSubtitle">
+            General help · CS context loaded
+          </div>
+        </div>
+
+      </div>
+
+      <div class="top-right">
+
+        <div class="engine-chip">
+          <span class="engine-mark"></span>
+          MoeAI engine
+        </div>
+
+        <button
+          class="context-button"
+          id="contextButton"
+          aria-label="Open context"
+        >
+          <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+            <rect
+              x="3"
+              y="3"
+              width="14"
+              height="14"
+              rx="3"
+              stroke="currentColor"
+              stroke-width="1.3"
+            />
+            <path
+              d="M13 3v14"
+              stroke="currentColor"
+              stroke-width="1.3"
+            />
+          </svg>
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- =====================================================
+         THREAD
+         ===================================================== -->
+
+    <section class="thread" id="thread">
+
+      <div class="thread-inner" id="welcomeHolder">
+
+        <div class="welcome">
+
+          <div class="welcome-orbit">
+            <div class="orbit-ring"></div>
+
+            <div class="welcome-core">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M6 6h5v5H6zM13 13h5v5h-5z"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                />
+                <path
+                  d="M11 8.5h2v7M8.5 11v2M13 8.5l5-2.5"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div class="eyebrow">MOEAI // COMPUTER SCIENCE</div>
+
+          <h1>
+            Build it.
+            <span>Understand it.</span>
+            <br />
+            Break it. Fix it.
+          </h1>
+
+          <p class="welcome-copy">
+            C++ first. Math when it matters. Debugging without the ceremony.
+            Drop a problem, a compiler error, a circuit, or half-finished code.
+          </p>
+
+          <div class="quick-grid">
+
+            <button
+              class="quick-card"
+              data-fill="Explain pointers and references in C++ with a memory diagram and a small example."
+            >
+              <div class="quick-icon">
+                <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M5 10h10M10 5v10"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                  />
+                  <circle
+                    cx="5"
+                    cy="10"
+                    r="2"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                  />
+                  <circle
+                    cx="15"
+                    cy="10"
+                    r="2"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                  />
+                </svg>
+              </div>
+              <div class="quick-title">Pointers / memory</div>
+              <div class="quick-desc">stack · heap · references</div>
+            </button>
+
+            <button
+              class="quick-card"
+              data-fill="Debug this C++ code and explain the actual bug, not just the corrected code."
+            >
+              <div class="quick-icon">
+                <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M7 4v3M13 4v3M5 8h10v5a3 3 0 01-3 3H8a3 3 0 01-3-3V8z"
+                    stroke="currentColor"
+                    stroke-width="1.3"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M3 10h2M15 10h2M7 16l-1 2M13 16l1 2"
+                    stroke="currentColor"
+                    stroke-width="1.3"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <div class="quick-title">Debug C++</div>
+              <div class="quick-desc">trace · diagnose · patch</div>
+            </button>
+
+            <button
+              class="quick-card"
+              data-fill="Solve this recurrence using the Master Theorem: T(n) = 2T(n/2) + n."
+            >
+              <div class="quick-icon">
+                <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M4 15l4-5 3 3 5-8"
+                    stroke="currentColor"
+                    stroke-width="1.35"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M13 5h3v3"
+                    stroke="currentColor"
+                    stroke-width="1.35"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <div class="quick-title">Algorithms</div>
+              <div class="quick-desc">complexity · recursion · graphs</div>
+            </button>
+
+            <button
+              class="quick-card"
+              data-fill="Explain Kirchhoff's laws with a simple circuit and show how to calculate the current."
+            >
+              <div class="quick-icon">
+                <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+                  <circle
+                    cx="5"
+                    cy="10"
+                    r="2"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                  />
+                  <circle
+                    cx="15"
+                    cy="10"
+                    r="2"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                  />
+                  <path
+                    d="M7 10h2l1-3 2 6 1-3h2"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="quick-title">Circuits</div>
+              <div class="quick-desc">KCL · KVL · Ohm's law</div>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         COMPOSER
+         ===================================================== -->
+
+    <section class="composer-zone">
+
+      <div class="attachments" id="attachments"></div>
+
+      <div class="command-menu glass" id="commandMenu"></div>
+
+      <div class="composer glass">
+
+        <button
+          class="composer-tool"
+          id="attachButton"
+          title="Attach"
+          aria-label="Attach file"
+        >
+          <svg class="icon" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M14 7l-6.3 6.3a2.5 2.5 0 103.5 3.5L18 10a4.5 4.5 0 00-6.4-6.4L4 11.2"
+              stroke="currentColor"
+              stroke-width="1.35"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+
+        <textarea
+          id="input"
+          rows="1"
+          autocomplete="off"
+          placeholder="Message MoeAI · / for commands"
+        ></textarea>
+
+        <button
+          class="composer-tool"
+          id="codeButton"
+          title="C++ mode"
+          aria-label="C++ mode"
+        >
+          <svg class="icon" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M7 5L3 10l4 5M13 5l4 5-4 5M11 3l-2 14"
+              stroke="currentColor"
+              stroke-width="1.25"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+
+        <button
+          class="composer-tool"
+          id="voiceButton"
+          title="Voice input"
+          aria-label="Voice input"
+        >
+          <svg class="icon" viewBox="0 0 20 20" fill="none">
+            <rect
+              x="7"
+              y="2.5"
+              width="6"
+              height="10"
+              rx="3"
+              stroke="currentColor"
+              stroke-width="1.25"
+            />
+            <path
+              d="M4 9a6 6 0 0012 0M10 15v2.5M7 18h6"
+              stroke="currentColor"
+              stroke-width="1.25"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+
+        <button
+          class="send"
+          id="sendButton"
+          aria-label="Send"
+        >
+          <svg class="icon" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M3 10l14-7-4.3 14-2.8-5.7L3 10z"
+              fill="currentColor"
+            />
+            <path
+              d="M10 11l7-8"
+              stroke="rgba(120,0,30,.35)"
+              stroke-width="1"
+            />
+          </svg>
+        </button>
+
+      </div>
+
+      <div class="composer-meta">
+        <span>Enter send · Shift+Enter newline</span>
+        <span id="remaining">6 messages available</span>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =======================================================
+       RIGHT PANEL
+       ======================================================= -->
+
+  <aside class="right-panel glass" id="rightPanel">
+
+    <div class="panel-header">
+      <span class="panel-label">Workspace</span>
+
+      <button
+        class="panel-close"
+        id="panelClose"
+        aria-label="Close context"
+      >
+        <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M5 5l10 10M15 5L5 15"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Context -->
+
+    <div class="context-card">
+
+      <div class="context-icon">
+        <svg class="icon" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M5 4h10v12H5z"
+            stroke="currentColor"
+            stroke-width="1.25"
+          />
+          <path
+            d="M8 7h4M8 10h4M8 13h2"
+            stroke="currentColor"
+            stroke-width="1.2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
+      <div class="context-title">Structured Programming</div>
+
+      <div class="context-sub">
+        C++ · pointers · functions · arrays
+      </div>
+
+    </div>
+
+    <!-- Concepts -->
+
+    <div class="panel-section">
+
+      <div class="panel-section-title">
+        <span>Concept map</span>
+        <span>current</span>
+      </div>
+
+      <div class="concept">
+
+        <div class="concept-icon">
+          <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+            <circle
+              cx="5"
+              cy="10"
+              r="2"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+            <circle
+              cx="15"
+              cy="5"
+              r="2"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+            <circle
+              cx="15"
+              cy="15"
+              r="2"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+            <path
+              d="M7 9l6-3M7 11l6 3"
+              stroke="currentColor"
+              stroke-width="1.1"
+            />
+          </svg>
+        </div>
+
+        <div class="concept-copy">
+          <div class="concept-name">Pointers</div>
+          <div class="concept-value">address · dereference</div>
+        </div>
+
+        <div class="mini-progress">
+          <span style="width:64%"></span>
+        </div>
+
+      </div>
+
+      <div class="concept">
+
+        <div class="concept-icon">
+          <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M4 6h5v5H4zM11 10h5v5h-5z"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+            <path
+              d="M9 8.5h2v3M6.5 11v2"
+              stroke="currentColor"
+              stroke-width="1.1"
+            />
+          </svg>
+        </div>
+
+        <div class="concept-copy">
+          <div class="concept-name">Functions</div>
+          <div class="concept-value">declaration · call · return</div>
+        </div>
+
+        <div class="mini-progress">
+          <span style="width:76%"></span>
+        </div>
+
+      </div>
+
+      <div class="concept">
+
+        <div class="concept-icon">
+          <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M5 15l3-4 3 2 4-7"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+
+        <div class="concept-copy">
+          <div class="concept-name">Arrays</div>
+          <div class="concept-value">index · iteration</div>
+        </div>
+
+        <div class="mini-progress">
+          <span style="width:48%"></span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Tools -->
+
+    <div class="panel-section">
+
+      <div class="panel-section-title">
+        <span>Tools</span>
+        <span>4</span>
+      </div>
+
+      <div class="tool-grid">
+
+        <button class="tool" data-tool="compiler">
+
+          <div class="tool-icon">
+            <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M5 5l4 5-4 5M11 15h4"
+                stroke="currentColor"
+                stroke-width="1.35"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
+          <div>
+            <div class="tool-title">C++ Lab</div>
+            <div class="tool-meta">compile / run</div>
+          </div>
+
+        </button>
+
+        <button class="tool" data-tool="math">
+
+          <div class="tool-icon">
+            <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M4 6h12M4 10h12M4 14h12"
+                stroke="currentColor"
+                stroke-width="1.1"
+                stroke-linecap="round"
+              />
+              <path
+                d="M7 4l-2 12M14 4l-2 12"
+                stroke="currentColor"
+                stroke-width="1"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+
+          <div>
+            <div class="tool-title">Math</div>
+            <div class="tool-meta">symbolic · calc</div>
+          </div>
+
+        </button>
+
+        <button class="tool" data-tool="circuit">
+
+          <div class="tool-icon">
+            <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+              <circle
+                cx="4.5"
+                cy="10"
+                r="2"
+                stroke="currentColor"
+                stroke-width="1.1"
+              />
+              <circle
+                cx="15.5"
+                cy="10"
+                r="2"
+                stroke="currentColor"
+                stroke-width="1.1"
+              />
+              <path
+                d="M6.5 10h2l1-3 2 6 1-3h1"
+                stroke="currentColor"
+                stroke-width="1.1"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
+          <div>
+            <div class="tool-title">Circuit</div>
+            <div class="tool-meta">KCL / KVL</div>
+          </div>
+
+        </button>
+
+        <button class="tool" data-tool="complexity">
+
+          <div class="tool-icon">
+            <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M4 15l3-4 3 2 5-7"
+                stroke="currentColor"
+                stroke-width="1.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M4 4v12h12"
+                stroke="currentColor"
+                stroke-width="1.1"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+
+          <div>
+            <div class="tool-title">Complexity</div>
+            <div class="tool-meta">O(n) · graphs</div>
+          </div>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- System -->
+
+    <div class="system-card">
+
+      <div class="panel-section-title" style="margin-bottom:9px;">
+        <span>Workspace state</span>
+      </div>
+
+      <div class="system-row">
+        <span class="system-indicator"></span>
+        <span class="system-name">context</span>
+        <span class="system-value">loaded</span>
+      </div>
+
+      <div class="system-row">
+        <span class="system-indicator blue"></span>
+        <span class="system-name">language</span>
+        <span class="system-value">C++</span>
+      </div>
+
+      <div class="system-row">
+        <span class="system-indicator"></span>
+        <span class="system-name">math renderer</span>
+        <span class="system-value">KaTeX</span>
+      </div>
+
+    </div>
+
+  </aside>
+
+</div>
+
+<!-- =========================================================
+     SCRIPT
+     ========================================================= -->
+
+<script>
+/* =========================================================
+   DATA — UPDATED FOR FUE CS CURRICULUM
+   ========================================================= */
+
+const MODES = [
+  {
+    id: "standard",
+    label: "Standard",
+    desc: "general help",
+    icon: "spark"
+  },
+  {
+    id: "quick",
+    label: "Quick",
+    desc: "short answers",
+    icon: "bolt"
+  },
+  {
+    id: "code",
+    label: "Code",
+    desc: "C++ first",
+    icon: "code"
+  },
+  {
+    id: "math",
+    label: "Math",
+    desc: "calculus / stats",
+    icon: "math"
+  },
+  {
+    id: "debug",
+    label: "Debug",
+    desc: "trace the bug",
+    icon: "bug"
+  },
+  {
+    id: "arabic",
+    label: "Arabic",
+    desc: "arabic / franco",
+    icon: "language"
+  },
+  {
+    id: "exam",
+    label: "Exam",
+    desc: "high-yield",
+    icon: "target"
+  }
+];
+
+const MODE_SUBTITLE = {
+  standard: "General help · CS context loaded",
+  quick: "Short answers · direct explanations",
+  code: "C++ first · compiler-aware explanations",
+  math: "Calculus · probability · discrete math",
+  debug: "Trace · isolate · repair",
+  arabic: "Arabic / Franco · natural explanations",
+  exam: "High-yield concepts · practice mode"
+};
+
+/* ─── HISTORY — ACTUAL FUE CS TOPICS ─── */
+
+const HISTORY = [
+  {
+    title: "Pointers & references (C++)",
+    time: "2h ago"
+  },
+  {
+    title: "K-map simplification (Logic)",
+    time: "yesterday"
+  },
+  {
+    title: "Separable ODE example",
+    time: "2 days ago"
+  },
+  {
+    title: "Bayes theorem problem",
+    time: "4 days ago"
+  },
+  {
+    title: "Full adder circuit (Logic)",
+    time: "last week"
+  },
+  {
+    title: "Binomial distribution",
+    time: "last week"
+  }
+];
+
+/* ─── COMMANDS — UPDATED FOR RELEVANT MODES ─── */
+
+const COMMANDS = [
+  {
+    command: "/code",
+    title: "C++ mode",
+    desc: "switch to code",
+    mode: "code",
+    icon: "code"
+  },
+  {
+    command: "/debug",
+    title: "Debug",
+    desc: "trace an error",
+    mode: "debug",
+    icon: "bug"
+  },
+  {
+    command: "/math",
+    title: "Math",
+    desc: "equations / derivations",
+    mode: "math",
+    icon: "math"
+  },
+  {
+    command: "/quick",
+    title: "Quick",
+    desc: "remove the fluff",
+    mode: "quick",
+    icon: "bolt"
+  },
+  {
+    command: "/exam",
+    title: "Exam",
+    desc: "focus on marks",
+    mode: "exam",
+    icon: "target"
+  },
+  {
+    command: "/arabic",
+    title: "Arabic",
+    desc: "switch language",
+    mode: "arabic",
+    icon: "language"
+  }
+];
+
+/* =========================================================
+   ICONS
+   ========================================================= */
+
+const ICONS = {
+  spark: `
+    <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M10 3l1.2 4.8L16 10l-4.8 1.2L10 16l-1.2-4.8L4 10l4.8-2.2L10 3z"
+        stroke="currentColor"
+        stroke-width="1.2"
+        stroke-linejoin="round"
+      />
+    </svg>
+  `,
+
+  bolt: `
+    <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M11.8 2.8L5 10.5h4l-.8 6.7 6.8-8.2h-4l.8-6.2z"
+        stroke="currentColor"
+        stroke-width="1.25"
+        stroke-linejoin="round"
+      />
+    </svg>
+  `,
+
+  code: `
+    <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M7 4.5L2.8 10 7 15.5M13 4.5l4.2 5.5-4.2 5.5M11 3l-2 14"
+        stroke="currentColor"
+        stroke-width="1.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  `,
+
+  math: `
+    <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M4 5h12M4 10h12M4 15h12"
+        stroke="currentColor"
+        stroke-width="1.15"
+        stroke-linecap="round"
+      />
+      <circle cx="7" cy="5" r="1" fill="currentColor"/>
+      <circle cx="13" cy="10" r="1" fill="currentColor"/>
+      <circle cx="9" cy="15" r="1" fill="currentColor"/>
+    </svg>
+  `,
+
+  bug: `
+    <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M7 7V5a3 3 0 016 0v2M5 8h10v4a5 5 0 01-10 0V8z"
+        stroke="currentColor"
+        stroke-width="1.2"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M3 9h2M15 9h2M3 13h2M15 13h2"
+        stroke="currentColor"
+        stroke-width="1.2"
+        stroke-linecap="round"
+      />
+    </svg>
+  `,
+
+  language: `
+    <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+      <circle
+        cx="10"
+        cy="10"
+        r="7"
+        stroke="currentColor"
+        stroke-width="1.15"
+      />
+      <path
+        d="M3.5 10h13M10 3c2 2 3 4.3 3 7s-1 5-3 7c-2-2-3-4.3-3-7s1-5 3-7z"
+        stroke="currentColor"
+        stroke-width="1.05"
+      />
+    </svg>
+  `,
+
+  target: `
+    <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+      <circle
+        cx="10"
+        cy="10"
+        r="7"
+        stroke="currentColor"
+        stroke-width="1.1"
+      />
+      <circle
+        cx="10"
+        cy="10"
+        r="3.5"
+        stroke="currentColor"
+        stroke-width="1.1"
+      />
+      <circle cx="10" cy="10" r="1" fill="currentColor"/>
+    </svg>
+  `
+};
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const sidebar = document.getElementById("sidebar");
+const backdrop = document.getElementById("backdrop");
+const rightPanel = document.getElementById("rightPanel");
+
+const modeList = document.getElementById("modeList");
+const history = document.getElementById("history");
+
+const input = document.getElementById("input");
+const sendButton = document.getElementById("sendButton");
+
+const thread = document.getElementById("thread");
+const welcomeHolder = document.getElementById("welcomeHolder");
+
+const commandMenu = document.getElementById("commandMenu");
+const attachments = document.getElementById("attachments");
+
+const topTitle = document.getElementById("topTitle");
+const topSubtitle = document.getElementById("topSubtitle");
+
+const quotaText = document.getElementById("quotaText");
+const quotaProgress = document.getElementById("quotaProgress");
+const remaining = document.getElementById("remaining");
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let currentMode = "standard";
+let messagesRemaining = 6;
+const dailyLimit = 20;
+
+/* =========================================================
+   MODE RENDERING
+   ========================================================= */
+
+function renderModes() {
+  modeList.innerHTML = "";
+
+  MODES.forEach(mode => {
+    const button = document.createElement("button");
+
+    button.className =
+      "mode" +
+      (mode.id === currentMode ? " active" : "");
+
+    button.dataset.mode = mode.id;
+
+    button.innerHTML = `
+      <span class="mode-icon">
+        ${ICONS[mode.icon]}
+      </span>
+
+      <span class="mode-text">
+        <span class="mode-name">${mode.label}</span>
+        <span class="mode-desc">${mode.desc}</span>
+      </span>
+    `;
+
+    button.addEventListener("click", () => {
+      setMode(mode.id);
+
+      if (window.innerWidth <= 850) {
+        closeSidebar();
+      }
+    });
+
+    modeList.appendChild(button);
+  });
+}
+
+function setMode(mode) {
+  currentMode = mode;
+
+  renderModes();
+
+  const selected = MODES.find(item => item.id === mode);
+
+  if (!selected) return;
+
+  topTitle.textContent = selected.label;
+  topSubtitle.textContent = MODE_SUBTITLE[mode];
+
+  if (mode === "code" || mode === "debug") {
+    input.placeholder = "Paste C++ code, an error, or describe the bug";
+  } else if (mode === "math") {
+    input.placeholder = "Equation, proof, recurrence, probability…";
+  } else if (mode === "exam") {
+    input.placeholder = "Topic, question, or past-paper problem…";
+  } else {
+    input.placeholder = "Message MoeAI · / for commands";
+  }
+}
+
+/* =========================================================
+   HISTORY
+   ========================================================= */
+
+function renderHistory(items = HISTORY) {
+  history.innerHTML = "";
+
+  items.forEach(item => {
+    const button = document.createElement("button");
+    button.className = "history-item";
+
+    button.innerHTML = `
+      <svg
+        class="history-icon icon-sm"
+        viewBox="0 0 20 20"
+        fill="none"
+      >
+        <path
+          d="M4 5h12v10H4z"
+          stroke="currentColor"
+          stroke-width="1.1"
+        />
+        <path
+          d="M7 8h6M7 11h4"
+          stroke="currentColor"
+          stroke-width="1.05"
+          stroke-linecap="round"
+        />
+      </svg>
+
+      <span class="history-copy">
+        <span class="history-title">${escapeHTML(item.title)}</span>
+        <span class="history-time">${escapeHTML(item.time)}</span>
+      </span>
+    `;
+
+    button.addEventListener("click", () => {
+      input.value = `Continue with "${item.title}"`;
+      input.dispatchEvent(new Event("input"));
+      input.focus();
+    });
+
+    history.appendChild(button);
+  });
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+document.getElementById("search").addEventListener("input", event => {
+  const query = event.target.value.trim().toLowerCase();
+
+  if (!query) {
+    renderHistory();
+    return;
+  }
+
+  renderHistory(
+    HISTORY.filter(item =>
+      item.title.toLowerCase().includes(query)
+    )
+  );
+});
+
+/* =========================================================
+   COMMAND MENU
+   ========================================================= */
+
+function renderCommands() {
+  commandMenu.innerHTML = "";
+
+  COMMANDS.forEach(item => {
+    const button = document.createElement("button");
+
+    button.className = "command-item";
+
+    button.innerHTML = `
+      <span class="command-icon">
+        ${ICONS[item.icon]}
+      </span>
+
+      <span>
+        <span class="command-name">
+          ${item.command} · ${item.title}
+        </span>
+        <span class="command-desc">
+          ${item.desc}
+        </span>
+      </span>
+    `;
+
+    button.addEventListener("click", () => {
+      setMode(item.mode);
+      input.value = "";
+      commandMenu.classList.remove("open");
+      input.focus();
+    });
+
+    commandMenu.appendChild(button);
+  });
+}
+
+function updateCommandMenu() {
+  const value = input.value.trim();
+
+  if (value === "/") {
+    commandMenu.classList.add("open");
+  } else {
+    commandMenu.classList.remove("open");
+  }
+}
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+input.addEventListener("input", () => {
+  input.style.height = "auto";
+  input.style.height =
+    Math.min(input.scrollHeight, 150) + "px";
+
+  updateCommandMenu();
+});
+
+input.addEventListener("keydown", event => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+
+  if (event.key === "Escape") {
+    commandMenu.classList.remove("open");
+  }
+});
+
+sendButton.addEventListener("click", sendMessage);
+
+/* =========================================================
+   QUICK PROMPTS
+   ========================================================= */
+
+document.querySelectorAll(".quick-card").forEach(card => {
+  card.addEventListener("click", () => {
+    input.value = card.dataset.fill;
+    input.dispatchEvent(new Event("input"));
+    input.focus();
+  });
+});
+
+/* =========================================================
+   NEW CHAT
+   ========================================================= */
+
+document.getElementById("newChat").addEventListener("click", () => {
+  thread.innerHTML = "";
+  thread.appendChild(welcomeHolder);
+
+  input.value = "";
+  input.style.height = "auto";
+
+  setMode("standard");
+
+  closeSidebar();
+
+  requestAnimationFrame(() => {
+    thread.scrollTop = 0;
+  });
+});
+
+/* =========================================================
+   SEND
+   ========================================================= */
+
+function sendMessage() {
+  const text = input.value.trim();
+
+  if (!text || text === "/" || messagesRemaining <= 0) {
+    return;
+  }
+
+  if (welcomeHolder.parentNode) {
+    welcomeHolder.remove();
+  }
+
+  addMessage("user", escapeHTML(text));
+
+  input.value = "";
+  input.style.height = "auto";
+  commandMenu.classList.remove("open");
+
+  messagesRemaining--;
+  updateQuota();
+
+  const thinking = addThinking();
+
+  setTimeout(() => {
+    thinking.remove();
+
+    addMessage(
+      "ai",
+      createReply(text)
+    );
+
+    thread.scrollTop = thread.scrollHeight;
+
+    renderMath();
+    wireCodeActions();
+  }, 420);
+}
+
+/* =========================================================
+   QUOTA
+   ========================================================= */
+
+function updateQuota() {
+  const used = dailyLimit - messagesRemaining;
+
+  quotaText.textContent =
+    `${used} / ${dailyLimit}`;
+
+  quotaProgress.style.width =
+    `${Math.min(100, used / dailyLimit * 100)}%`;
+
+  if (messagesRemaining <= 0) {
+    remaining.textContent = "Daily limit reached";
+  } else {
+    remaining.textContent =
+      `${messagesRemaining} messages available`;
+  }
+
+  sendButton.disabled =
+    messagesRemaining <= 0;
+}
+
+/* =========================================================
+   MESSAGE CREATION
+   ========================================================= */
+
+function addMessage(role, html) {
+  const wrapper = document.createElement("div");
+
+  wrapper.className = "thread-inner";
+
+  const mode = MODES.find(item => item.id === currentMode);
+
+  if (role === "user") {
+    wrapper.innerHTML = `
+      <div class="message user">
+
+        <div class="message-content">
+
+          <div class="message-text">
+            ${html}
+          </div>
+
+          <div class="message-footer">
+            <span>${timestamp()}</span>
+          </div>
+
+        </div>
+
+      </div>
+    `;
+  } else {
+    wrapper.innerHTML = `
+      <div class="message ai">
+
+        <div class="ai-avatar">
+          <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M5 5h4v4H5zM11 11h4v4h-4z"
+              stroke="currentColor"
+              stroke-width="1.15"
+            />
+            <path
+              d="M9 7h2v6H9M7 9v2"
+              stroke="currentColor"
+              stroke-width="1.05"
+            />
+          </svg>
+        </div>
+
+        <div class="message-content">
+
+          <div class="message-text">
+
+            <div class="mode-pill">
+              <span class="mode-pill-icon"></span>
+              ${escapeHTML(mode ? mode.label : "MoeAI")}
+            </div>
+
+            ${html}
+
+          </div>
+
+          <div class="message-footer">
+
+            <span>${timestamp()}</span>
+
+            <div class="message-actions">
+
+              <button
+                class="message-action copy-message"
+                title="Copy"
+              >
+                <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+                  <rect
+                    x="7"
+                    y="7"
+                    width="9"
+                    height="9"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="1.15"
+                  />
+                  <path
+                    d="M4 13V5a2 2 0 012-2h8"
+                    stroke="currentColor"
+                    stroke-width="1.15"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="message-action regenerate"
+                title="Regenerate"
+              >
+                <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M15.5 6A6.5 6.5 0 105.8 16"
+                    stroke="currentColor"
+                    stroke-width="1.15"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M15.5 3v4h-4"
+                    stroke="currentColor"
+                    stroke-width="1.15"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    `;
+  }
+
+  thread.appendChild(wrapper);
+
+  if (role === "ai") {
+    const copy = wrapper.querySelector(".copy-message");
+
+    copy?.addEventListener("click", () => {
+      const content =
+        wrapper.querySelector(".message-text")?.innerText || "";
+
+      navigator.clipboard?.writeText(content);
+    });
+
+    wrapper
+      .querySelector(".regenerate")
+      ?.addEventListener("click", () => {
+        const text = wrapper.querySelector(".message-text");
+
+        if (!text) return;
+
+        text.innerHTML = `
+          <div class="mode-pill">
+            <span class="mode-pill-icon"></span>
+            ${escapeHTML(
+              MODES.find(item => item.id === currentMode)?.label ||
+              "MoeAI"
+            )}
+          </div>
+
+          ${createReply("explain this more clearly")}
+        `;
+
+        wireCodeActions();
+        renderMath();
+      });
+  }
+
+  thread.scrollTop = thread.scrollHeight;
+}
+
+/* =========================================================
+   THINKING STATE
+   ========================================================= */
+
+function addThinking() {
+  const wrapper = document.createElement("div");
+
+  wrapper.className = "thread-inner";
+
+  wrapper.innerHTML = `
+    <div class="message ai">
+
+      <div class="ai-avatar">
+        <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M5 5h4v4H5zM11 11h4v4h-4z"
+            stroke="currentColor"
+            stroke-width="1.15"
+          />
+          <path
+            d="M9 7h2v6H9M7 9v2"
+            stroke="currentColor"
+            stroke-width="1.05"
+          />
+        </svg>
+      </div>
+
+      <div class="message-content">
+
+        <div class="thinking-row">
+          <span class="thinking-line"></span>
+          <span>working through it</span>
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+  thread.appendChild(wrapper);
+
+  thread.scrollTop = thread.scrollHeight;
+
+  return wrapper;
+}
+
+/* =========================================================
+   REPLY ENGINE — FUE CS CURRICULUM ONLY
+   ========================================================= */
+
+function createReply(text) {
+  const lower = text.toLowerCase();
+
+  // ─── STRUCTURED PROGRAMMING (C++) ──────────────────────────────
+  if (
+    lower.includes("pointer") ||
+    lower.includes("reference") ||
+    lower.includes("memory") ||
+    lower.includes("address")
+  ) {
+    return `
+      <p>
+        <strong>Pointers</strong> store memory addresses. A variable holds a value; a pointer holds <em>where</em> that value lives.
+      </p>
+
+      <div class="code-shell">
+
+        <div class="code-top">
+
+          <div class="window-dots">
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+          </div>
+
+          <div class="code-tab">
+            <span class="cpp-logo">C++</span>
+            pointer.cpp
+          </div>
+
+          <div class="code-head-actions">
+            <button class="code-button copy-code">Copy</button>
+            <button class="code-button run run-code">Run</button>
+          </div>
+
+        </div>
+
+        <div class="code-body">
+
+          <div class="line-numbers">
+            1<br>
+            2<br>
+            3<br>
+            4<br>
+            5<br>
+            6<br>
+            7
+          </div>
+
+          <div class="code-content">
+
+<pre><span class="prep">#include</span> <span class="op">&lt;iostream&gt;</span>
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="type">int</span> <span class="var">x</span> <span class="op">=</span> <span class="num">42</span>;
+    <span class="type">int</span><span class="op">*</span> <span class="var">p</span> <span class="op">=</span> <span class="op">&amp;</span><span class="var">x</span>;
+
+    std<span class="op">::</span>cout <span class="op">&lt;&lt;</span> <span class="op">*</span><span class="var">p</span>; <span class="comment">// 42</span>
+}</pre>
+
+          </div>
+
+        </div>
+
+        <div class="code-output">
+
+          <div class="output-head">
+            <span class="output-status"></span>
+            program output
+          </div>
+
+          <div class="output-body">
+            <span class="success">42</span>
+            <br>
+            <span class="muted">
+              p stores the address of x; *p reads the value at that address.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <p>
+        <strong>Key distinction:</strong>
+        <code>p</code> is the address; <code>*p</code> is the object at that address.
+        <br>
+        A <strong>reference</strong> (<code>&amp;r</code>) is an alias — it must be initialized and cannot be reseated.
+      </p>
+    `;
+  }
+
+  // ─── LOGIC DESIGN ──────────────────────────────────────────────
+  if (
+    lower.includes("k-map") ||
+    lower.includes("kmap") ||
+    lower.includes("gate") ||
+    lower.includes("boolean") ||
+    lower.includes("truth table") ||
+    lower.includes("adder")
+  ) {
+    return `
+      <p>
+        A <strong>Karnaugh map (K-map)</strong> simplifies Boolean expressions by grouping 1s in powers of 2.
+      </p>
+
+      <p>
+        <strong>Example:</strong> \\(F(A,B,C) = \\Sigma(1,3,5,7)\\)
+      </p>
+
+      <ul>
+        <li>Group all 1s — they wrap around edges.</li>
+        <li>Each group gives a product term.</li>
+        <li>Eliminate variables that change within a group.</li>
+      </ul>
+
+      <p>
+        For the example above, the result is <strong>\\(F = C\\)</strong> — because C is the only variable that stays constant across all the 1s.
+      </p>
+
+      <p>
+        <strong>Exam trap:</strong> Always check for Don't-Care conditions and larger group sizes. A group of 8 beats a group of 4.
+      </p>
+    `;
+  }
+
+  // ─── DIFFERENTIAL EQUATIONS ────────────────────────────────────
+  if (
+    lower.includes("ode") ||
+    lower.includes("differential") ||
+    lower.includes("separable") ||
+    lower.includes("integrating factor")
+  ) {
+    return `
+      <p>
+        A first‑order linear ODE has the form:
+        $$\\frac{dy}{dx} + P(x)y = Q(x)$$
+      </p>
+
+      <p>
+        <strong>Solution method (integrating factor):</strong>
+        <br>
+        1. Compute \\(\\mu = e^{\\int P(x) dx}\\)
+        <br>
+        2. Multiply through: \\(\\mu y' + \\mu P(x)y = \\mu Q(x)\\)
+        <br>
+        3. Recognise: \\((\\mu y)' = \\mu Q(x)\\)
+        <br>
+        4. Integrate and solve for \\(y\\).
+      </p>
+
+      <p>
+        <strong>Example:</strong> \\(y' + 2y = 4\\)
+        <br>
+        \\(\\mu = e^{2x}\\), so \\((e^{2x} y)' = 4e^{2x}\\)
+        <br>
+        \\(e^{2x} y = 2e^{2x} + C\\) → \\(y = 2 + Ce^{-2x}\\)
+      </p>
+    `;
+  }
+
+  // ─── PROBABILITY & STATISTICS ──────────────────────────────────
+  if (
+    lower.includes("bayes") ||
+    lower.includes("probability") ||
+    lower.includes("binomial") ||
+    lower.includes("poisson") ||
+    lower.includes("conditional")
+  ) {
+    return `
+      <p>
+        <strong>Bayes' Theorem</strong> updates probabilities after new evidence:
+        $$P(A|B) = \\frac{P(B|A)P(A)}{P(B)}$$
+      </p>
+
+      <p>
+        <strong>Binomial distribution:</strong> fixed number of trials \\(n\\), success probability \\(p\\).
+        $$P(X=k) = {n \\choose k} p^k (1-p)^{n-k}$$
+      </p>
+
+      <p>
+        <strong>Poisson distribution:</strong> models events per unit time with rate \\(\\lambda\\).
+        $$P(X=k) = \\frac{e^{-\\lambda} \\lambda^k}{k!}$$
+      </p>
+
+      <p>
+        <strong>Exam tip:</strong> Binomial → "fixed n, count successes". Poisson → "average rate, count events".
+      </p>
+    `;
+  }
+
+  // ─── CALCULUS ──────────────────────────────────────────────────
+  if (
+    lower.includes("derivative") ||
+    lower.includes("integral") ||
+    lower.includes("limit") ||
+    lower.includes("differentiate")
+  ) {
+    return `
+      <p>
+        <strong>Power rule for derivatives:</strong>
+        $$\\frac{d}{dx} x^n = n x^{n-1}$$
+      </p>
+
+      <p>
+        <strong>Power rule for integrals:</strong>
+        $$\\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\quad (n \\neq -1)$$
+      </p>
+
+      <p>
+        <strong>Chain rule:</strong>
+        $$\\frac{d}{dx} f(g(x)) = f'(g(x)) \\cdot g'(x)$$
+      </p>
+
+      <p>
+        <strong>Example:</strong> \\(\\int (3x^2 + 2x) dx = x^3 + x^2 + C\\)
+      </p>
+
+      <p>
+        <strong>Exam trap:</strong> Always add \\(+C\\) for indefinite integrals. Missing it is a guaranteed mark drop.
+      </p>
+    `;
+  }
+
+  // ─── PHYSICS (CIRCUITS) ────────────────────────────────────────
+  if (
+    lower.includes("ohm") ||
+    lower.includes("kcl") ||
+    lower.includes("kvl") ||
+    lower.includes("circuit") ||
+    lower.includes("current") ||
+    lower.includes("voltage")
+  ) {
+    return `
+      <p>
+        <strong>Ohm's law:</strong> \\(V = IR\\)
+      </p>
+
+      <p>
+        <strong>Kirchhoff's Voltage Law (KVL):</strong> the sum of voltages around any closed loop is zero.
+      </p>
+
+      <p>
+        <strong>Kirchhoff's Current Law (KCL):</strong> the sum of currents entering a node equals the sum leaving.
+      </p>
+
+      <p>
+        <strong>Simple series example:</strong>
+        <br>
+        Two resistors \\(R_1 = 10\\Omega\\), \\(R_2 = 20\\Omega\\) in series with \\(V = 12V\\):
+        <br>
+        \\(R_{eq} = 10 + 20 = 30\\Omega\\)
+        <br>
+        \\(I = V / R_{eq} = 12 / 30 = 0.4A\\)
+        <br>
+        \\(V_1 = I \\cdot R_1 = 4V\\), \\(V_2 = I \\cdot R_2 = 8V\\)
+      </p>
+    `;
+  }
+
+  // ─── DISCRETE MATHEMATICS ──────────────────────────────────────
+  if (
+    lower.includes("set") ||
+    lower.includes("combinatorics") ||
+    lower.includes("permutation") ||
+    lower.includes("combination") ||
+    lower.includes("logic") ||
+    lower.includes("propositional")
+  ) {
+    return `
+      <p>
+        <strong>Set operations:</strong>
+        <br>
+        Union: \\(A \\cup B\\) — elements in either
+        <br>
+        Intersection: \\(A \\cap B\\) — elements in both
+        <br>
+        Complement: \\(A'\\) — elements not in A
+      </p>
+
+      <p>
+        <strong>Combinatorics:</strong>
+        <br>
+        Permutations (order matters): \\(P(n,r) = \\frac{n!}{(n-r)!}\\)
+        <br>
+        Combinations (order doesn't): \\(C(n,r) = \\frac{n!}{r!(n-r)!}\\)
+      </p>
+
+      <p>
+        <strong>Logic:</strong> De Morgan's laws
+        <br>
+        \\((A \\land B)' = A' \\lor B'\\)
+        <br>
+        \\((A \\lor B)' = A' \\land B'\\)
+      </p>
+    `;
+  }
+
+  // ─── COMPUTING FUNDAMENTALS ────────────────────────────────────
+  if (
+    lower.includes("binary") ||
+    lower.includes("hex") ||
+    lower.includes("number system") ||
+    lower.includes("cpu") ||
+    lower.includes("compiler") ||
+    lower.includes("hardware")
+  ) {
+    return `
+      <p>
+        <strong>Binary to decimal:</strong> \\(1010_2 = 1\\cdot2^3 + 0\\cdot2^2 + 1\\cdot2^1 + 0\\cdot2^0 = 10_{10}\\)
+      </p>
+
+      <p>
+        <strong>Hexadecimal:</strong> \\(0x1A = 1\\cdot16 + 10 = 26_{10}\\)
+      </p>
+
+      <p>
+        <strong>Hardware:</strong> Von Neumann architecture — CPU fetches instructions from memory, decodes, executes.
+      </p>
+
+      <p>
+        <strong>Compiler vs Interpreter:</strong>
+        <br>
+        Compiler translates the whole program at once.
+        <br>
+        Interpreter executes line by line.
+      </p>
+    `;
+  }
+
+  // ─── EXAM MODE ──────────────────────────────────────────────────
+  if (
+    (currentMode === "exam") ||
+    lower.includes("exam") ||
+    lower.includes("past paper") ||
+    lower.includes("tomorrow")
+  ) {
+    return `
+      <p>
+        Send me the topics or a past paper. I'll compress it into:
+      </p>
+
+      <ul>
+        <li><strong>Core concepts</strong> — what you actually need to know</li>
+        <li><strong>Likely questions</strong> — patterns from previous exams</li>
+        <li><strong>Worked examples</strong> — with step‑by‑step reasoning</li>
+        <li><strong>Traps</strong> — the mistakes students make</li>
+      </ul>
+
+      <p>
+        We don't study everything equally. Start with the highest‑return material.
+      </p>
+    `;
+  }
+
+  // ─── FALLBACK ──────────────────────────────────────────────────
+  if (
+    lower.includes("hello") ||
+    lower.includes("hi") ||
+    lower.includes("hey")
+  ) {
+    return `
+      <p>
+        Hey. Drop the problem.
+      </p>
+
+      <p>
+        Code, equations, circuits, algorithms — whatever is currently fighting you.
+      </p>
+    `;
+  }
+
+  if (
+    lower.includes("can't study") ||
+    lower.includes("cant study") ||
+    lower.includes("tired")
+  ) {
+    return `
+      <p>
+        Don't turn the session into a punishment loop.
+        Give me the exact topic and the time you have, and we'll cut it
+        down to the parts that actually matter.
+      </p>
+    `;
+  }
+
+  return `
+    <p>
+      Got it. Give me the actual problem and I'll work from there.
+    </p>
+
+    <p>
+      If it's code, paste the whole relevant function rather than only
+      the line that looks suspicious.
+    </p>
+  `;
+}
+
+/* =========================================================
+   CODE ACTIONS
+   ========================================================= */
+
+function wireCodeActions() {
+  document.querySelectorAll(".copy-code").forEach(button => {
+    if (button.dataset.wired) return;
+
+    button.dataset.wired = "true";
+
+    button.addEventListener("click", () => {
+      const shell = button.closest(".code-shell");
+      const code = shell?.querySelector(".code-content pre");
+
+      if (!code) return;
+
+      navigator.clipboard?.writeText(
+        code.innerText
+      );
+
+      const old = button.innerHTML;
+
+      button.textContent = "Copied";
+
+      setTimeout(() => {
+        button.innerHTML = old;
+      }, 1000);
+    });
+  });
+
+  document.querySelectorAll(".run-code").forEach(button => {
+    if (button.dataset.wired) return;
+
+    button.dataset.wired = "true";
+
+    button.addEventListener("click", () => {
+      const shell = button.closest(".code-shell");
+      const output = shell?.querySelector(".code-output");
+
+      if (!output) return;
+
+      output.classList.toggle("show");
+    });
+  });
+}
+
+/* =========================================================
+   ATTACHMENTS
+   ========================================================= */
+
+const attachmentExamples = [
+  "lecture.pdf",
+  "main.cpp",
+  "notes.txt",
+  "circuit.png"
+];
+
+document
+  .getElementById("attachButton")
+  .addEventListener("click", () => {
+
+    const name =
+      attachmentExamples[
+        Math.floor(
+          Math.random() * attachmentExamples.length
+        )
+      ];
+
+    const item = document.createElement("div");
+
+    item.className = "attachment";
+
+    item.innerHTML = `
+      <svg class="icon-sm" viewBox="0 0 20 20" fill="none">
+        <path
+          d="M6 3h6l3 3v11H6z"
+          stroke="currentColor"
+          stroke-width="1.1"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M12 3v4h3"
+          stroke="currentColor"
+          stroke-width="1.1"
+        />
+      </svg>
+
+      <span>${escapeHTML(name)}</span>
+
+      <button
+        class="attachment-remove"
+        aria-label="Remove attachment"
+      >
+        ×
+      </button>
+    `;
+
+    item
+      .querySelector(".attachment-remove")
+      .addEventListener("click", () => {
+        item.remove();
+      });
+
+    attachments.appendChild(item);
+  });
+
+/* =========================================================
+   C++ BUTTON
+   ========================================================= */
+
+document
+  .getElementById("codeButton")
+  .addEventListener("click", () => {
+    setMode("code");
+
+    input.value =
+      "#include <iostream>\\n\\nint main() {\\n    \\n}";
+
+    input.dispatchEvent(new Event("input"));
+
+    input.focus();
+  });
+
+/* =========================================================
+   VOICE BUTTON
+   ========================================================= */
+
+document
+  .getElementById("voiceButton")
+  .addEventListener("click", () => {
+
+    if (
+      !("SpeechRecognition" in window) &&
+      !("webkitSpeechRecognition" in window)
+    ) {
+      input.placeholder =
+        "Voice input isn't available in this browser";
+      return;
+    }
+
+    const Recognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    const recognition = new Recognition();
+
+    recognition.lang = "en-US";
+    recognition.interimResults = true;
+
+    recognition.onresult = event => {
+      const result =
+        event.results[event.results.length - 1];
+
+      input.value = result[0].transcript;
+
+      input.dispatchEvent(new Event("input"));
+    };
+
+    recognition.start();
+  });
+
+/* =========================================================
+   RIGHT PANEL
+   ========================================================= */
+
+document
+  .getElementById("contextButton")
+  .addEventListener("click", () => {
+    rightPanel.classList.add("open");
+    backdrop.classList.add("show");
+  });
+
+document
+  .getElementById("panelClose")
+  .addEventListener("click", () => {
+    closeRightPanel();
+  });
+
+/* =========================================================
+   MOBILE SIDEBAR
+   ========================================================= */
+
+document
+  .getElementById("menuButton")
+  .addEventListener("click", () => {
+    sidebar.classList.add("open");
+    backdrop.classList.add("show");
+  });
+
+function closeSidebar() {
+  sidebar.classList.remove("open");
+
+  if (!rightPanel.classList.contains("open")) {
+    backdrop.classList.remove("show");
+  }
+}
+
+function closeRightPanel() {
+  rightPanel.classList.remove("open");
+
+  if (!sidebar.classList.contains("open")) {
+    backdrop.classList.remove("show");
+  }
+}
+
+backdrop.addEventListener("click", () => {
+  closeSidebar();
+  closeRightPanel();
+});
+
+/* =========================================================
+   RIGHT PANEL TOOLS
+   ========================================================= */
+
+document.querySelectorAll(".tool").forEach(tool => {
+  tool.addEventListener("click", () => {
+
+    const type = tool.dataset.tool;
+
+    const prompts = {
+      compiler:
+        "Open a C++ debugging workspace. I want to inspect compiler errors.",
+      math:
+        "Let's work through this mathematically step by step.",
+      circuit:
+        "Help me analyze this circuit using KCL, KVL, and Ohm's law.",
+      complexity:
+        "Analyze the time and space complexity of this algorithm."
+    };
+
+    input.value = prompts[type] || "";
+    input.dispatchEvent(new Event("input"));
+    input.focus();
+
+    if (window.innerWidth <= 1180) {
+      closeRightPanel();
+    }
+  });
+});
+
+/* =========================================================
+   MATH RENDER
+   ========================================================= */
+
+function renderMath() {
+  if (!window.renderMathInElement) return;
+
+  renderMathInElement(thread, {
+    delimiters: [
+      {
+        left: "$$",
+        right: "$$",
+        display: true
+      },
+      {
+        left: "$",
+        right: "$",
+        display: false
+      }
+    ],
+    throwOnError: false
+  });
+}
+
+/* =========================================================
+   UTILS
+   ========================================================= */
+
+function escapeHTML(value) {
+  return String(value).replace(
+    /[&<>"']/g,
+    char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    }[char])
+  );
+}
+
+function timestamp() {
+  return new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+/* =========================================================
+   AMBIENT PARALLAX
+   ========================================================= */
+
+const reducedMotion =
+  window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+if (!reducedMotion) {
+
+  const ambient =
+    document.querySelectorAll(".ambient");
+
+  window.addEventListener(
+    "pointermove",
+    event => {
+
+      const x =
+        event.clientX / window.innerWidth - .5;
+
+      const y =
+        event.clientY / window.innerHeight - .5;
+
+      ambient.forEach((element, index) => {
+
+        const depth =
+          (index + 1) * 8;
+
+        element.style.transform =
+          `translate3d(${x * depth}px, ${y * depth}px, 0)`;
+      });
+    },
+    { passive: true }
+  );
+}
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+window.addEventListener("keydown", event => {
+
+  if (
+    (event.metaKey || event.ctrlKey) &&
+    event.key.toLowerCase() === "k"
+  ) {
+    event.preventDefault();
+    document.getElementById("search").focus();
+  }
+
+  if (
+    (event.metaKey || event.ctrlKey) &&
+    event.key.toLowerCase() === "j"
+  ) {
+    event.preventDefault();
+    input.focus();
+  }
+});
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+renderModes();
+renderHistory();
+renderCommands();
+setMode("standard");
+updateQuota();
+
+window.addEventListener("load", () => {
+  renderMath();
+  wireCodeActions();
+});
+
+</script>
+
+</body>
+</html>

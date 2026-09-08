@@ -14,9 +14,14 @@ export type Course = {
 
 export function CourseCard({ course }: { course: Course }) {
   return (
-    <article className="course-card" style={{ "--course-accent": course.accent } as React.CSSProperties}>
+    <article
+      className="course-card"
+      style={{ "--course-accent": course.accent } as React.CSSProperties}
+    >
       <div className="course-card-top">
-        <span className="course-symbol" aria-hidden="true">{course.symbol}</span>
+        <span className="course-symbol" aria-hidden="true">
+          {course.symbol}
+        </span>
         <span className="course-code">{course.code}</span>
       </div>
       <div>
@@ -25,7 +30,10 @@ export function CourseCard({ course }: { course: Course }) {
       </div>
       <div className="course-card-bottom">
         <span>{course.status}</span>
-        <Link href={`/courses#${course.code.toLowerCase()}`} aria-label={`Explore ${course.title}`}>
+        <Link
+          href={`/courses#${course.code.toLowerCase()}`}
+          aria-label={`Explore ${course.title}`}
+        >
           <ArrowUpRight size={17} aria-hidden="true" />
         </Link>
       </div>

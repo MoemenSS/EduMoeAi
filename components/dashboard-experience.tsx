@@ -1,59 +1,184 @@
 "use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, BookOpenCheck, BrainCircuit, CalendarDays, Check, Flame, Trophy, Zap } from "lucide-react";
-import { courseProgress } from "@/lib/courses";
-
-type ProgressRow = { course_code: string; current_lesson: string | null; percent: number };
-
-const schedule = [
-  { time: "Today · 10:00", title: "Probability checkpoint", note: "5 questions · 8 minutes" },
-  { time: "Friday", title: "Logic assignment", note: "K-map simplification" },
-  { time: "Next week", title: "C++ lab", note: "Pointers & arrays" },
-];
-
-export function DashboardExperience({ progressRows = [], connected = false }: { progressRows?: ProgressRow[]; connected?: boolean }) {
-  const [completed, setCompleted] = useState<string[]>([]);
-  const progress = progressRows.length ? courseProgress.map((course) => {
-    const saved = progressRows.find((row) => row.course_code === course.code);
-    return saved ? { ...course, progress: saved.percent, next: saved.current_lesson || course.next } : course;
-  }) : courseProgress;
+import {
+  ArrowRight,
+  BrainCircuit,
+  Flame,
+  Target,
+  BookOpenCheck,
+} from "lucide-react";
+import { courses } from "@/lib/courses";
+import { summarize, readLocalAttempts, type Attempt } from "@/lib/learning";
+type ProgressRow = {
+  course_code: string;
+  current_lesson: string | null;
+  percent: number;
+};
+export function DashboardExperience({
+  progressRows = [],
+  connected = false,
+  attempts = [],
+  userId = null,
+}: {
+  progressRows?: ProgressRow[];
+  connected?: boolean;
+  attempts?: Attempt[];
+  userId?: string | null;
+}) {
+  const [local, setLocal] = useState<Attempt[]>([]);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setLocal(readLocalAttempts(userId)));
+    return () => cancelAnimationFrame(id);
+  }, [userId]);
+  const history = [
+    ...new Map([...local, ...attempts].map((a) => [a.id, a])).values(),
+  ].sort((a, b) => b.created_at.localeCompare(a.created_at));
+  const stats = summarize(history);
   return (
     <div className="dashboard-grid">
       <section className="focus-card glass-panel">
-        <div className="focus-card-top"><span className="status-dot"><Flame size={14} /> Today&apos;s focus</span><span>{connected ? "Supabase synced" : "Local preview"}</span></div>
-        <div><span className="section-kicker">Differential Equations · Unit 2</span><h2>Separable equations</h2><p>Continue from the worked example and finish the three-question check.</p></div>
-        <div className="focus-progress"><span style={{ width: "68%" }} /></div>
-        <div className="focus-actions"><Link className="button button-primary" href="/lecture">Continue lesson <ArrowRight size={16} /></Link><Link className="button button-secondary" href="/quizzes">Quick practice</Link></div>
+        <div className="focus-card-top">
+          <span className="status-dot">
+            <Flame size={14} /> Your next useful step
+          </span>
+          <span>{connected ? "Account connected" : "This device"}</span>
+        </div>
+        <div>
+          <span className="section-kicker">
+            {history.length ? "Keep the learning going" : "A fresh start"}
+          </span>
+          <h2>
+            {stats.weaknesses.length
+              ? `Revisit ${stats.weaknesses[0].topic.split(" / ").pop()}`
+              : "Find your first lightbulb moment."}
+          </h2>
+          <p>
+            {history.length
+              ? "Your practice history shapes these suggestions. A short review is a good next step."
+              : "Read a lesson or complete a practice set. Your real progress will appear here."}
+          </p>
+        </div>
+        <div className="focus-actions">
+          <Link className="button button-primary" href="/quizzes">
+            {history.length ? "Keep practicing" : "Start a first set"}
+            <ArrowRight size={16} />
+          </Link>
+          <Link className="button button-secondary" href="/courses">
+            Explore courses
+          </Link>
+        </div>
       </section>
-
-      <section className="metric-stack" aria-label="Learning statistics">
-        <article><Zap size={17} /><strong>1,240</strong><span>Learning XP</span></article>
-        <article><Flame size={17} /><strong>14 days</strong><span>Current streak</span></article>
-        <article><Trophy size={17} /><strong>Top 12%</strong><span>This semester</span></article>
+      <section className="metric-stack">
+        <article>
+          <Target size={17} />
+          <strong>{stats.total ? `${stats.accuracy}%` : "—"}</strong>
+          <span>Practice accuracy</span>
+        </article>
+        <article>
+          <Flame size={17} />
+          <strong>{stats.streak}</strong>
+          <span>Day study streak</span>
+        </article>
+        <article>
+          <BookOpenCheck size={17} />
+          <strong>{stats.total}</strong>
+          <span>Questions answered</span>
+        </article>
       </section>
-
       <section className="workspace-panel progress-panel">
-        <div className="panel-heading"><div><span className="section-kicker">Course momentum</span><h2>Keep the signal moving.</h2></div><Link href="/courses">All courses <ArrowRight size={15} /></Link></div>
+        <div className="panel-heading">
+          <div>
+            <span className="section-kicker">Course progress</span>
+            <h2>Your semester, at a glance.</h2>
+          </div>
+        </div>
         <div className="progress-list">
-          {progress.map((course) => <article key={course.code}><div><span>{course.code}</span><strong>{course.name}</strong><small>Next: {course.next}</small></div><div className="progress-value"><strong>{course.progress}%</strong><span><i style={{ width: `${course.progress}%` }} /></span></div></article>)}
+          {courses.map((course) => {
+            const row = progressRows.find((r) => r.course_code === course.code);
+            return (
+              <article key={course.code}>
+                <div>
+                  <span>{course.code}</span>
+                  <Link href={`/lecture?course=${course.code}`}>
+                    <strong>{course.title}</strong>
+                  </Link>
+                  <small>{row?.current_lesson || "Ready when you are"}</small>
+                </div>
+                <div className="progress-value">
+                  <strong>{row?.percent || 0}%</strong>
+                  <span>
+                    <i style={{ width: `${row?.percent || 0}%` }} />
+                  </span>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
-
       <section className="workspace-panel recommendation-panel">
-        <div className="panel-heading"><div><span className="section-kicker">MoeAI signals</span><h2>Recommended for you.</h2></div><BrainCircuit size={20} /></div>
+        <div className="panel-heading">
+          <div>
+            <span className="section-kicker">Shared with MoeAI</span>
+            <h2>What needs attention.</h2>
+          </div>
+          <BrainCircuit size={20} />
+        </div>
         <div className="recommendation-list">
-          <Link href="/simulators"><span><BrainCircuit size={17} /></span><div><strong>Untangle K-maps visually</strong><small>Logic Design · based on your last quiz</small></div><ArrowRight size={16} /></Link>
-          <Link href="/quizzes"><span><BookOpenCheck size={17} /></span><div><strong>Review Poisson distribution</strong><small>2 attempts · concept needs attention</small></div><ArrowRight size={16} /></Link>
+          {stats.weaknesses.length ? (
+            stats.weaknesses.map((item) => (
+              <Link href="/quizzes" key={item.topic}>
+                <div>
+                  <strong>{item.topic}</strong>
+                  <small>
+                    {item.correct}/{item.total} correct · {item.accuracy}%
+                    accuracy
+                  </small>
+                </div>
+                <ArrowRight size={16} />
+              </Link>
+            ))
+          ) : (
+            <p className="empty-note">
+              {stats.total
+                ? "No weak topics in your recorded answers. Try a different subject to broaden your practice."
+                : "Finish a quiz to build your first learning signals."}
+            </p>
+          )}
         </div>
+        <Link href="/moeai" className="button button-secondary">
+          Open MoeAI context <ArrowRight size={15} />
+        </Link>
       </section>
-
       <section className="workspace-panel schedule-panel">
-        <div className="panel-heading"><div><span className="section-kicker">Upcoming</span><h2>Your next three.</h2></div><CalendarDays size={20} /></div>
-        <div className="schedule-list">
-          {schedule.map((item) => { const done = completed.includes(item.title); return <button className={done ? "done" : ""} key={item.title} onClick={() => setCompleted((items) => done ? items.filter((value) => value !== item.title) : [...items, item.title])}><span className="schedule-check">{done ? <Check size={14} /> : null}</span><span><small>{item.time}</small><strong>{item.title}</strong><em>{item.note}</em></span></button>; })}
+        <div className="panel-heading">
+          <div>
+            <span className="section-kicker">Recent practice</span>
+            <h2>Your learning trail.</h2>
+          </div>
         </div>
+        {history.length ? (
+          <div className="progress-list">
+            {history.slice(0, 5).map((attempt) => (
+              <article key={attempt.id}>
+                <div>
+                  <strong>{attempt.subject}</strong>
+                  <small>
+                    {new Date(attempt.created_at).toLocaleDateString()}
+                  </small>
+                </div>
+                <strong>
+                  {attempt.score}/{attempt.total}
+                </strong>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="empty-note">
+            No activity yet. This space fills with your completed practice, not
+            sample statistics.
+          </p>
+        )}
       </section>
     </div>
   );
