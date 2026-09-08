@@ -16,7 +16,7 @@ The original EduMoe HTML documents are the visual source of truth for all nine m
 | `simulators.html` | `/simulators` |
 | `admin.html` | `/admin` |
 
-The converter changes only legacy links that explicitly reference another `.html` file. Those links open the corresponding Next.js route in the top-level window. Hash links, external links, appearance, and other interactions remain as authored in the originals.
+The converter maps legacy `.html` links and the homepage's obsolete “coming soon” navigation handlers to their corresponding Next.js routes. They open in the top-level window. External links, appearance, and non-navigation interactions remain as authored in the originals.
 
 ## Verification
 

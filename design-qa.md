@@ -13,7 +13,7 @@
 
 No actionable P0, P1, or P2 mismatch remains. The implementation uses the complete original document as its generated TypeScript source, including the original CSS, fonts, canvas rendering, DOM, copy, and JavaScript. The direct-source and TSX-route captures have the same typography, spacing, palette, artwork, controls, and content. Differences between captures are limited to the original page's running title and student-counter animations.
 
-All nine routes loaded successfully. The route conversion changes only links that named an old `.html` file, mapping them to the corresponding Next.js route and targeting the top-level window. Hash links, external links, page styling, and page interactions remain unchanged.
+All nine routes loaded successfully. The route conversion maps links that named an old `.html` file and the homepage's obsolete “coming soon” navigation handlers to their corresponding Next.js routes. Hash links without a real destination, external links, page styling, and non-navigation interactions remain unchanged.
 
 The original responsive CSS is embedded unchanged in the generated TypeScript documents, so the source and implementation use the same breakpoints and mobile rules. No replacement visual assets were introduced.
 

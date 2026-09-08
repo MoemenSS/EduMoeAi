@@ -30,6 +30,33 @@ const routeLinks = {
   "admin.html": "/admin",
 };
 
+const homeToastRoutes = {
+  "📚 Courses page coming soon!": "/courses",
+  "📚 Courses coming soon!": "/courses",
+  "📘 Structured Programming — coming soon": "/courses",
+  "🔌 Logic Design — coming soon": "/courses",
+  "📐 Differential Equations — coming soon": "/courses",
+  "🎲 Probability & Statistics — coming soon": "/courses",
+  "∫ Calculus — coming soon": "/courses",
+  "⚡ Physics — coming soon": "/courses",
+  "🔢 Discrete Mathematics — coming soon": "/courses",
+  "💾 Computing Fundamentals — coming soon": "/courses",
+  "🎛️ Simulators page coming soon!": "/simulators",
+  "🎛️ Simulators coming soon!": "/simulators",
+  "⌨️ Compiler coming soon!": "/simulators",
+  "🧮 Math Solver coming soon!": "/simulators",
+  "🔌 Logic Sim coming soon!": "/simulators",
+  "📝 Quizzes coming soon!": "/quizzes",
+  "📝 Practice page coming soon!": "/quizzes",
+  "🏆 Ranked page coming soon!": "/ranked",
+  "🏆 Ranked coming soon!": "/ranked",
+  "🧠 MoeAI is coming soon — the FUE curriculum-aware assistant.": "/moeai",
+  "🧠 MoeAI page coming soon!": "/moeai",
+  "🧠 MoeAI coming soon!": "/moeai",
+  "ℹ️ About coming soon!": "/about",
+  "📊 Admin panel coming soon!": "/admin",
+};
+
 const converted = {};
 
 for (const [key, fileName] of Object.entries(pages)) {
@@ -39,6 +66,15 @@ for (const [key, fileName] of Object.entries(pages)) {
       `href="${oldLink}"`,
       `target="_top" href="${route}"`,
     );
+  }
+
+  if (key === "home") {
+    for (const [toast, route] of Object.entries(homeToastRoutes)) {
+      document = document.replaceAll(
+        `onclick="showToast('${toast}')"`,
+        `onclick="window.top.location.href='${route}'; return false;"`,
+      );
+    }
   }
   converted[key] = document;
 }
