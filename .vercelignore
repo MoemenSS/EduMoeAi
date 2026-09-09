@@ -1,7 +1,10 @@
-design-reference
-database
-docs
-scripts
-browser-*.png
-*.md
 .git
+.vercel
+.env
+.env.*
+static-build
+.static-build
+node_modules
+browser-*.png
+qa-*.png
+*.md

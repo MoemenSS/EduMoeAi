@@ -1,41 +1,41 @@
-# EduMoeAi
+# EduMoeAI
 
-A Next.js 16 / React 19 / TypeScript conversion of the original EduMoe interface for FUE Computer Science students. The supplied HTML documents are the visual source of truth and are generated into typed runtime documents without redesigning them.
+EduMoeAI is a student-built Computer Science learning platform for FUE. The production site intentionally uses one self-contained HTML file per page so the interface stays easy to inspect, edit, and teach from.
 
-## Run
+## Pages
 
-Node.js 24 is required.
+- `index.html` — home, animated EduMoe book, subject map, and platform navigation
+- `courses.html` — curriculum and lecture entry points
+- `quizzes.html` — browser-based practice
+- `simulators.html` — C++, math, physics, probability, and logic tools
+- `ranked.html` — ranked learning interface
+- `dashboard.html` — student progress interface
+- `lecture_example.html` — interactive lecture workspace
+- `moeai.html` — full educational AI workspace with Markdown, KaTeX, code blocks, voice input, source uploads, study modes, and local conversation continuity
+- `about.html` — project story, principles, roadmap, and community
+- `admin.html` — original administration interface
+- `api/moeai.js` — server-only streamed provider fallback for MoeAI
 
-```sh
-npm ci
-cp .env.example .env.local
-npm run dev
+Every page keeps its CSS and JavaScript inline. There is no framework build step and no browser-exposed AI credential.
+
+## Local preview
+
+Serve the directory with any static server:
+
+```powershell
+python -m http.server 4173
 ```
 
-Set only the public Supabase URL and publishable key in the public environment variables. Never put service-role keys in `NEXT_PUBLIC_*` variables.
+Static pages work directly. The `/api/moeai` route requires Vercel or an equivalent Node serverless runtime.
 
-```sh
-npm run typecheck
-npm run lint
-npm run build
-```
+## MoeAI configuration
 
-## Structure
+Copy `.env.example` to `.env.local` for local secret storage. Configure `GEMINI_API_KEY`, optional `GROQ_API_KEY` and `GEMINI_BACKUP_API_KEY`, and `MOEAI_SYSTEM_PROMPT` as private Vercel environment variables. Never place them in an HTML file or a variable prefixed with `NEXT_PUBLIC_`.
 
-- `app/`: thin TSX page routes for every original screen, plus the existing auth callback.
-- `components/original-page.tsx`: the isolated React renderer that prevents framework styles from changing the originals.
-- `lib/original-pages.generated.ts`: generated TypeScript documents used by the production routes.
-- `scripts/convert-original-pages.mjs`: repeatable converter from the supplied HTML sources to the typed runtime source.
-- `content/`: original starter reading seed.
-- `database/`: reviewed database operations and rollback-only verification scripts.
-- `design-reference/`: supplied original HTML preserved as reference copies outside the public directory.
-- `public/brand/`: SVG wordmark and app mark.
-- `docs/`: release status, verification evidence, and third-party notices.
-
-The original page styling, copy, canvas effects, themes, and browser interactions are preserved. Only old links such as `dashboard.html` are translated to their equivalent Next.js routes.
+Provider order is Gemini, Groq, then the backup Gemini credential. The browser receives only streamed response text.
 
 ## Deployment
 
-`vercel.json` explicitly selects the Next.js framework. Deploy from the linked project directory with `vercel --prod`, or push to the connected GitHub production branch. The public deployment is https://edu-moe-ai.vercel.app/.
+The repository is linked to the `edu-moe-ai` Vercel project. A production deployment serves the HTML files directly and runs `api/moeai.js` as a Vercel Function.
 
-See `docs/release-status.md` for what is implemented and what still requires configuration or content. SQL operation files describe migrations already applied to the linked project; do not blindly rerun them against production.
+Public site: https://edu-moe-ai.vercel.app/
